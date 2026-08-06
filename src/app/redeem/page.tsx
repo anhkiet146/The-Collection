@@ -198,6 +198,9 @@ export default function RedeemPage() {
       case "sting": return "🥤";
       case "banh_trang": return "🥙";
       case "2k": return "💵";
+      case "hao_hao": return "🍜";
+      case "tra_sua": return "🧋";
+      case "com_tam": return "🍛";
       default: return "🎁";
     }
   };

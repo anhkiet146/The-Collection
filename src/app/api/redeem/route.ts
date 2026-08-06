@@ -4,9 +4,12 @@ import { connectToDatabase } from "@/lib/db";
 import { User, UserCard, Redemption } from "@/lib/models";
 
 const GIFT_SHOP = [
-  { id: "2k", name: "2,000đ Tiền Mặt", points: 100, description: "Quy đổi ra 2,000đ tiền mặt trực tiếp" },
-  { id: "sting", name: "Chai Sting Dâu", points: 150, description: "Một chai nước tăng lực Sting dâu mát lạnh" },
-  { id: "banh_trang", name: "Bánh Tráng Trộn", points: 200, description: "Bánh tráng trộn siêu ngon nhiều topping" },
+  { id: "2k", name: "2,000đ Tiền Mặt", points: 10000, description: "Quy đổi ra 2,000đ tiền mặt trực tiếp" },
+  { id: "hao_hao", name: "Gói Mì Hảo Hảo", points: 15000, description: "Mì ăn liền Hảo Hảo chua cay quốc dân" },
+  { id: "sting", name: "Chai Sting Dâu", points: 30000, description: "Một chai nước tăng lực Sting dâu mát lạnh" },
+  { id: "banh_trang", name: "Bánh Tráng Trộn", points: 40000, description: "Bánh tráng trộn siêu ngon nhiều topping" },
+  { id: "tra_sua", name: "Ly Trà Sữa", points: 60000, description: "Một ly trà sữa trân châu full topping cực ngon" },
+  { id: "com_tam", name: "Combo Cơm Tấm", points: 100000, description: "Đĩa cơm tấm sườn bì chả chất lượng kèm nước ngọt" },
 ];
 
 const RECYCLE_VALUES = {
