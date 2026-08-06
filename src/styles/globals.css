@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #f9f9fb;
+    --foreground: #09090b;
+    --card: #ffffff;
+    --card-hover: #f4f4f5;
+    --border: #e4e4e7;
+    --accent: #09090b;
+    --accent-foreground: #ffffff;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+}
+
+/* Custom glow animations for different rarities (enhanced for light backgrounds) */
+.glow-common {
+  box-shadow: 0 0 10px rgba(161, 161, 170, 0.2);
+  border-color: rgba(161, 161, 170, 0.4);
+}
+
+.glow-rare {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.glow-epic {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  border-color: rgba(168, 85, 247, 0.6);
+}
+
+.glow-legendary {
+  box-shadow: 0 0 25px rgba(234, 179, 8, 0.35);
+  border-color: rgba(234, 179, 8, 0.7);
+}
+
+.glow-mythic {
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+  border-color: rgba(239, 68, 68, 0.8);
+}
+
+.glow-secret {
+  box-shadow: 0 0 35px rgba(236, 72, 153, 0.45);
+  border-color: rgba(236, 72, 153, 0.9);
+  animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 40px rgba(236, 72, 153, 0.7);
+  }
+}
+
+/* Card flip style animations */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Gacha pack float and shake */
+@keyframes gacha-pack-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); }
+}
+
+@keyframes gacha-pack-shake {
+  0%, 100% { transform: rotate(0deg); }
+  20%, 60% { transform: rotate(-3deg); }
+  40%, 80% { transform: rotate(3deg); }
+}
+
+.animate-pack-float {
+  animation: gacha-pack-float 2.5s ease-in-out infinite;
+}
+
+.animate-pack-shake {
+  animation: gacha-pack-shake 0.3s ease-in-out infinite;
+}
+
+/* Light rays animation */
+@keyframes rotate-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+/* Explosive flash */
+@keyframes flash-burst {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-flash-burst {
+  animation: flash-burst 0.7s ease-out forwards;
+}
+
+/* Exploding particles for rarities */
+@keyframes particle-fly {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--tw-particle-x), var(--tw-particle-y)) scale(0); opacity: 0; }
+}
+
+.animate-particle {
+  animation: particle-fly 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
