@@ -123,13 +123,13 @@ export default function HomePage() {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "COMMON": return "border-zinc-700 text-zinc-400";
-      case "RARE": return "border-blue-900/60 text-blue-400";
-      case "EPIC": return "border-purple-900/60 text-purple-400";
-      case "LEGENDARY": return "border-amber-900/60 text-amber-400";
-      case "MYTHIC": return "border-red-950/60 text-red-500";
-      case "SECRET": return "border-pink-900/60 text-pink-400";
-      default: return "border-zinc-700 text-zinc-400";
+      case "COMMON": return "border-zinc-300 text-zinc-550 bg-zinc-50";
+      case "RARE": return "border-blue-400 text-blue-600 bg-blue-50/50";
+      case "EPIC": return "border-purple-400 text-purple-600 bg-purple-50/50";
+      case "LEGENDARY": return "border-amber-400 text-amber-600 bg-amber-50/50";
+      case "MYTHIC": return "border-red-500 text-red-650 bg-red-50/50";
+      case "SECRET": return "card-secret-front text-pink-600 shadow-md";
+      default: return "border-zinc-200 text-zinc-400";
     }
   };
 

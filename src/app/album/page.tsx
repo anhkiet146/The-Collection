@@ -74,12 +74,12 @@ export default function AlbumPage() {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "COMMON": return "border-zinc-200 text-zinc-500 bg-zinc-50";
-      case "RARE": return "border-blue-200 text-blue-600 bg-blue-50/50";
-      case "EPIC": return "border-purple-200 text-purple-600 bg-purple-50/50";
-      case "LEGENDARY": return "border-amber-250 text-amber-600 bg-amber-50/50";
-      case "MYTHIC": return "border-red-200 text-red-600 bg-red-50/50";
-      case "SECRET": return "border-pink-200 text-pink-600 bg-pink-50/50";
+      case "COMMON": return "border-zinc-300 text-zinc-550 bg-zinc-50";
+      case "RARE": return "border-blue-400 text-blue-700 bg-blue-50/70";
+      case "EPIC": return "border-purple-400 text-purple-700 bg-purple-50/70";
+      case "LEGENDARY": return "border-amber-400 text-amber-700 bg-amber-50/70";
+      case "MYTHIC": return "border-red-500 text-red-700 bg-red-50/70";
+      case "SECRET": return "card-secret-front text-pink-700 shadow-md";
       default: return "border-zinc-200 text-zinc-400";
     }
   };
