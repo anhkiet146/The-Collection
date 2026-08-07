@@ -287,7 +287,7 @@ export default function AlbumPage() {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                   {albumCards.map((card) => {
                     const isUnlocked = card.quantity > 0;
-                    const canSeeCard = userRole === "ADMIN" || isUnlocked;
+                    const canSeeCard = true;
                     const rarityColorClass = getRarityColor(card.rarity);
 
                     return (

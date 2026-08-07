@@ -16,12 +16,23 @@ export async function GET() {
     await UserCard.deleteMany({});
     await UserMission.deleteMany({});
 
-    // 2. Create Admin User
+    // 2. Create Admin Users
     const adminPasswordHash = bcrypt.hashSync("admin123", 10);
     await User.create({
       username: "admin",
       passwordHash: adminPasswordHash,
       displayName: "Quản Trị Viên",
+      role: "ADMIN",
+      rollsLeft: 100,
+      totalRolls: 0,
+      pityCounter: 0,
+    });
+
+    const admin2PasswordHash = bcrypt.hashSync("adminpassword123", 10);
+    await User.create({
+      username: "admin2",
+      passwordHash: admin2PasswordHash,
+      displayName: "Quản Trị Viên 2",
       role: "ADMIN",
       rollsLeft: 100,
       totalRolls: 0,
@@ -172,6 +183,7 @@ export async function GET() {
       message: "Database seeded successfully!",
       users: {
         admin: "admin / admin123",
+        admin2: "admin2 / adminpassword123",
         user: "user / user123",
       },
     });
