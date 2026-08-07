@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Đăng nhập hàng ngày",
+    "description": "Đăng nhập vào hệ thống mỗi ngày để nhận lượt rút",
+    "type": "DAILY",
+    "target": 1,
+    "rewardRolls": 3,
+    "key": "daily_login"
+  },
+  {
+    "title": "Kẻ cuồng rút bài",
+    "description": "Rút bài 3 lần trong ngày",
+    "type": "DAILY",
+    "target": 3,
+    "rewardRolls": 5,
+    "key": "daily_roll_3"
+  },
+  {
+    "title": "Khoe bộ sưu tập",
+    "description": "Chia sẻ album của bạn với bạn bè",
+    "type": "DAILY",
+    "target": 1,
+    "rewardRolls": 2,
+    "key": "daily_share"
+  },
+  {
+    "title": "Nhà sưu tầm nghiệp dư",
+    "description": "Sưu tập được 20 thẻ bài khác nhau",
+    "type": "ACHIEVEMENT",
+    "target": 20,
+    "rewardRolls": 15,
+    "key": "collect_20"
+  },
+  {
+    "title": "Khoảnh khắc lịch sử",
+    "description": "Sở hữu thẻ Legendary đầu tiên",
+    "type": "ACHIEVEMENT",
+    "target": 1,
+    "rewardRolls": 10,
+    "key": "first_legendary"
+  }
+]
