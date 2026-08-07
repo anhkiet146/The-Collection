@@ -130,32 +130,21 @@ export default function AdminPage() {
     setMessage(null);
 
     try {
-      // Compress image client-side to maximum 800px width with 80% WebP quality
-      const compressedBlob = await compressImage(file, 800, 0.8);
-      const cleanFileName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
-      const compressedFile = new File([compressedBlob], `${cleanFileName}.webp`, {
-        type: "image/webp",
-      });
-
-      setImageFile(compressedFile);
-
-      const formData = new FormData();
-      formData.append("file", compressedFile);
-
-      const res = await fetch("/api/cards/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.success) {
-        setImageUrl(data.imageUrl);
-      } else {
-        setMessage({ text: data.error || "Tải ảnh lên thất bại", type: "error" });
-      }
+      // Compress image client-side to maximum 800px width with 75% WebP quality
+      const compressedBlob = await compressImage(file, 800, 0.75);
+      
+      // Convert compressed WebP Blob to Base64 String
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedBlob);
+      reader.onloadend = () => {
+        const base64data = reader.result as string;
+        setImageUrl(base64data);
+        setImageFile(null); // Bypasses file upload server endpoint
+        setUploadingImage(false);
+      };
     } catch (err: any) {
       console.error(err);
-      setMessage({ text: "Lỗi xử lý nén hoặc tải tệp", type: "error" });
-    } finally {
+      setMessage({ text: "Lỗi xử lý nén ảnh cục bộ", type: "error" });
       setUploadingImage(false);
     }
   };
@@ -481,32 +470,58 @@ export default function AdminPage() {
                 <label className="block text-[10px] font-semibold text-zinc-555 uppercase tracking-wider mb-1.5">
                   Ảnh thẻ bài *
                 </label>
-                <div className="relative border border-dashed border-zinc-200 rounded-md p-4 flex flex-col items-center justify-center bg-zinc-50 hover:bg-zinc-100 transition-colors cursor-pointer">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    required={!imageUrl}
-                    onChange={handleFileChange}
-                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                  />
-                  
-                  {uploadingImage ? (
-                    <RefreshCw className="w-5 h-5 text-zinc-400 animate-spin" />
-                  ) : imageUrl ? (
-                    <div className="w-full flex flex-col items-center">
-                      <img
-                        src={imageUrl}
-                        alt="Preview"
-                        className="w-32 h-20 object-cover rounded border border-zinc-200 mb-2"
-                      />
-                      <span className="text-[10px] text-emerald-600 font-medium">Tải ảnh thành công</span>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center">
-                      <Upload className="w-5 h-5 text-zinc-400 mb-2" />
-                      <span className="text-xs text-zinc-500 font-medium">Kéo thả hoặc click chọn ảnh</span>
-                    </div>
-                  )}
+                <div className="space-y-3">
+                  {/* File Upload (Converts to Base64 WebP) */}
+                  <div className="relative border border-dashed border-zinc-200 rounded-md p-4 flex flex-col items-center justify-center bg-zinc-50 hover:bg-zinc-100 transition-colors cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                    
+                    {uploadingImage ? (
+                      <RefreshCw className="w-5 h-5 text-zinc-400 animate-spin" />
+                    ) : imageUrl && imageUrl.startsWith("data:") ? (
+                      <div className="w-full flex flex-col items-center">
+                        <img
+                          src={imageUrl}
+                          alt="Preview"
+                          className="w-32 h-20 object-cover rounded border border-zinc-200 mb-2"
+                        />
+                        <span className="text-[10px] text-emerald-600 font-medium">Nén & chuyển đổi Base64 thành công</span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <Upload className="w-5 h-5 text-zinc-400 mb-2" />
+                        <span className="text-xs text-zinc-500 font-medium">Chọn file ảnh (tự động nén WebP)</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Or Paste Direct Image URL */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] text-zinc-400 text-center font-semibold tracking-wider select-none">— HOẶC DÁN ĐƯỜNG DẪN ẢNH TRỰC TIẾP —</span>
+                    <input
+                      type="text"
+                      value={imageUrl.startsWith("data:") ? "" : imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      placeholder="Dán link ảnh từ Internet (ví dụ: https://imgur.com/...)"
+                      className="w-full bg-zinc-50/50 border border-border rounded-md px-3 py-2 text-sm text-zinc-800 focus:outline-none focus:border-zinc-350 transition-colors placeholder-zinc-400 shadow-sm"
+                    />
+                    {imageUrl && !imageUrl.startsWith("data:") && (
+                      <div className="mt-2 flex justify-center">
+                        <img
+                          src={imageUrl}
+                          alt="Preview URL"
+                          className="w-32 h-20 object-cover rounded border border-zinc-200 animate-fade-in"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
