@@ -262,7 +262,7 @@ export default function RedeemPage() {
               <Gift className="w-4 h-4 text-zinc-500" /> Quà tặng quy đổi
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {shop.map((gift) => (
                 <div key={gift.id} className="border border-border rounded-lg p-4 flex flex-col justify-between hover:border-zinc-300 transition-all bg-zinc-50/50">
                   <div className="text-center mb-4">

@@ -75,14 +75,14 @@ export default function HomePage() {
       });
       const data = await res.json();
       if (data.success) {
-        // Wait for the pull animation to build suspense (0.8 seconds)
+        // Wait for the pull animation to build suspense (0.4 seconds)
         setTimeout(() => {
           setRolledCards(data.pulledCards);
           setUser(data.user);
           setAnimationPhase("revealing");
           // Trigger header sync
           window.dispatchEvent(new Event("user-balance-updated"));
-        }, 800);
+        }, 400);
       } else {
         setError(data.error || "Rút thẻ thất bại");
         setAnimationPhase("idle");
@@ -245,7 +245,7 @@ export default function HomePage() {
             <div className="absolute w-[450px] h-[450px] rounded-full bg-gradient-to-tr from-amber-400/10 via-purple-500/10 to-blue-500/15 blur-3xl animate-rotate-slow pointer-events-none" />
 
             {/* Glowing floating card pack container */}
-            <div className="relative w-64 h-96 rounded-lg border border-zinc-200 bg-card flex flex-col items-center justify-between p-6 shadow-2xl animate-pack-float animate-pack-shake">
+            <div className="relative w-56 h-80 sm:w-64 sm:h-96 rounded-lg border border-zinc-200 bg-card flex flex-col items-center justify-between p-6 shadow-2xl animate-pack-float animate-pack-shake">
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-100/30 to-transparent pointer-events-none rounded-lg" />
               <div className="absolute inset-0.5 rounded-[7px] border border-zinc-200/50 pointer-events-none" />
               
@@ -275,7 +275,7 @@ export default function HomePage() {
               <h2 className="text-sm font-mono text-zinc-500 font-semibold">
                 KẾT QUẢ RÚT THẺ ({rolledCards.length} THẺ)
               </h2>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
                 <button
                   onClick={handleRevealAll}
                   className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors font-medium mr-2"
@@ -300,7 +300,7 @@ export default function HomePage() {
             </div>
 
             {/* Grid display for results */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-center w-full max-w-6xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-6 justify-center w-full max-w-6xl">
               {rolledCards.map((card, idx) => {
                 const isFlipped = revealed[idx] || false;
                 const rarityColorClass = getRarityColor(card.rarity);

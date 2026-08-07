@@ -109,16 +109,16 @@ export default function Header() {
         </div>
 
         {user && (
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3 text-xs sm:text-sm bg-zinc-50 border border-border px-3 py-1.5 rounded-md">
-              <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs bg-zinc-50 border border-border px-2 py-1 rounded-md sm:px-3 sm:py-1.5">
+              <div className="flex items-center gap-0.5">
                 <span className="text-zinc-400 font-medium">Lượt:</span>
-                <span className="text-zinc-800 font-bold">{user.role === "ADMIN" ? "Vô hạn" : user.rollsLeft}</span>
+                <span className="text-zinc-800 font-bold">{user.role === "ADMIN" ? "∞" : user.rollsLeft}</span>
               </div>
-              <div className="h-3 w-[1px] bg-zinc-200" />
-              <div className="flex items-center gap-1">
+              <div className="h-2.5 w-[1px] bg-zinc-200" />
+              <div className="flex items-center gap-0.5">
                 <span className="text-zinc-400 font-medium">Pity:</span>
-                <span className="text-zinc-800 font-bold">{user.pityCounter}/60</span>
+                <span className="text-zinc-800 font-bold">{user.pityCounter}</span>
               </div>
             </div>
 
@@ -147,6 +147,18 @@ export default function Header() {
       {/* Mobile nav menu */}
       {mobileMenuOpen && user && (
         <div className="md:hidden border-b border-border bg-card px-4 py-3 flex flex-col gap-2">
+          {/* Mobile Stats Dashboard */}
+          <div className="flex justify-between items-center bg-zinc-50/50 border border-border rounded-md p-3 mb-1 text-xs">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-zinc-400 font-medium">Lượt quay</span>
+              <span className="text-zinc-800 font-bold text-sm">{user.role === "ADMIN" ? "Vô hạn (Admin)" : `${user.rollsLeft} lượt`}</span>
+            </div>
+            <div className="h-8 w-[1px] bg-zinc-200" />
+            <div className="flex flex-col gap-0.5">
+              <span className="text-zinc-400 font-medium">Bộ đếm Pity</span>
+              <span className="text-zinc-800 font-bold text-sm">{user.pityCounter}/60 lượt</span>
+            </div>
+          </div>
           <Link 
             href="/" 
             onClick={() => setMobileMenuOpen(false)}
