@@ -63,9 +63,11 @@ export default function RedeemPage() {
         
         // Initialize recycle quantities to 1
         const initialQuantities: Record<string, number> = {};
-        data.userCards.forEach((uc: UserCard) => {
+        const validUserCards = data.userCards.filter((uc: UserCard) => uc.cardId !== null && uc.cardId !== undefined);
+        validUserCards.forEach((uc: UserCard) => {
           initialQuantities[uc.cardId._id] = 1;
         });
+        setUserCards(validUserCards);
         setRecycleQuantities(initialQuantities);
       } else {
         router.push("/login");

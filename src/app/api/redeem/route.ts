@@ -49,9 +49,12 @@ export async function GET(req: Request) {
 
     // Normal User Mode
     // Fetch all user cards with quantity >= 1
-    const userCards = await UserCard.find({ userId: user._id, quantity: { $gt: 0 } })
+    const rawUserCards = await UserCard.find({ userId: user._id, quantity: { $gt: 0 } })
       .populate("cardId")
       .lean();
+
+    // Filter out user cards whose linked cardId was deleted or is missing
+    const userCards = rawUserCards.filter((uc: any) => uc.cardId !== null && uc.cardId !== undefined);
 
     const redemptions = await Redemption.find({ userId: user._id }).sort({ createdAt: -1 });
 
@@ -95,6 +98,11 @@ export async function POST(req: Request) {
       }
 
       const card = userCard.cardId as any;
+      if (!card) {
+        // Cleanup orphaned inventory record
+        await UserCard.findByIdAndDelete(userCard._id);
+        return NextResponse.json({ success: false, error: "Thẻ bài này đã bị xóa khỏi hệ thống" }, { status: 400 });
+      }
       const pointsPerCard = RECYCLE_VALUES[card.rarity as keyof typeof RECYCLE_VALUES] || 10;
       const totalPointsEarned = pointsPerCard * quantity;
 
