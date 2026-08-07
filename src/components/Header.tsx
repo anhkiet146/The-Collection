@@ -21,6 +21,12 @@ export default function Header() {
 
   useEffect(() => {
     fetchUser();
+
+    // Listen to custom balance update events to sync instantly
+    window.addEventListener("user-balance-updated", fetchUser);
+    return () => {
+      window.removeEventListener("user-balance-updated", fetchUser);
+    };
   }, [pathname]);
 
   const fetchUser = async () => {

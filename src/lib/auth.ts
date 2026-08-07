@@ -28,6 +28,25 @@ export async function getSessionUser(): Promise<IUser | null> {
 
     await connectToDatabase();
     const user = await User.findById(payload.userId);
+    if (!user) return null;
+
+    // Apply roll regeneration over time (1 roll every 30 minutes, max 50 rolls)
+    if (user.role === "USER" && user.rollsLeft < 50) {
+      const now = new Date();
+      const lastRegen = user.lastRollRegenTime ? new Date(user.lastRollRegenTime) : new Date(user.createdAt || now);
+      const diffMs = now.getTime() - lastRegen.getTime();
+      const intervalMs = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+      if (diffMs >= intervalMs) {
+        const rollsToAdd = Math.floor(diffMs / intervalMs);
+        const newRollsLeft = Math.min(50, user.rollsLeft + rollsToAdd);
+        
+        user.rollsLeft = newRollsLeft;
+        user.lastRollRegenTime = new Date(lastRegen.getTime() + (rollsToAdd * intervalMs));
+        await user.save();
+      }
+    }
+
     return user;
   } catch (error) {
     console.error("Session verification error:", error);

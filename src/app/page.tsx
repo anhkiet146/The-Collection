@@ -80,6 +80,8 @@ export default function HomePage() {
           setRolledCards(data.pulledCards);
           setUser(data.user);
           setAnimationPhase("revealing");
+          // Trigger header sync
+          window.dispatchEvent(new Event("user-balance-updated"));
         }, 2200);
       } else {
         setError(data.error || "Rút thẻ thất bại");

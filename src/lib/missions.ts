@@ -50,6 +50,7 @@ export async function updateCollectionAchievement(userId: string | mongoose.Type
     await connectToDatabase();
     const distinctCount = await UserCard.countDocuments({ userId, quantity: { $gt: 0 } });
     await updateMissionProgress(userId, "collect_20", 0, distinctCount);
+    await updateMissionProgress(userId, "collect_40", 0, distinctCount);
   } catch (error) {
     console.error("Error updating collection achievement:", error);
   }

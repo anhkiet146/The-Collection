@@ -58,6 +58,8 @@ export default function MissionsPage() {
       const data = await res.json();
       if (data.success) {
         setMessage({ text: data.message, type: "success" });
+        // Trigger header sync
+        window.dispatchEvent(new Event("user-balance-updated"));
         // Refresh page/user balance
         router.refresh();
         await fetchMissions();

@@ -48,9 +48,10 @@ export async function GET() {
       passwordHash: userPasswordHash,
       displayName: "Người Chơi Gacha",
       role: "USER",
-      rollsLeft: 15,
+      rollsLeft: 50,
       totalRolls: 0,
       pityCounter: 0,
+      lastRollRegenTime: new Date(),
     });
 
     // 4. Create Standard Missions

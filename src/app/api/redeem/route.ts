@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { User, UserCard, Redemption } from "@/lib/models";
+import { updateMissionProgress } from "@/lib/missions";
 
 const GIFT_SHOP = [
   { id: "2k", name: "2,000đ Tiền Mặt", points: 10000, description: "Quy đổi ra 2,000đ tiền mặt trực tiếp" },
@@ -107,6 +108,9 @@ export async function POST(req: Request) {
 
       // Add points to user account
       await User.findByIdAndUpdate(user._id, { $inc: { points: totalPointsEarned } });
+
+      // Update daily recycle mission progress
+      await updateMissionProgress(user._id, "daily_recycle_1", 1);
 
       return NextResponse.json({
         success: true,

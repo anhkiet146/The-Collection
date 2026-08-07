@@ -10,6 +10,7 @@ export interface IUser extends Document {
   pityCounter: number;
   points: number;
   lastDailyClaim?: Date;
+  lastRollRegenTime?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -70,6 +71,7 @@ const UserSchema = new Schema<IUser>(
     pityCounter: { type: Number, default: 0 },
     points: { type: Number, default: 0 },
     lastDailyClaim: { type: Date },
+    lastRollRegenTime: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );

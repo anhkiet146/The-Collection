@@ -47,12 +47,14 @@ export async function POST(req: Request) {
     const pulledCards = [];
     let currentPity = user.pityCounter;
     let containsLegendaryOrBetter = false;
-
+    let containsMythic = false;
+    let containsSecret = false;
+ 
     for (let i = 0; i < amount; i++) {
       const roll = calculateRollRarity(currentPity);
       let rarityToUse: RarityType = roll.rarity;
       currentPity = roll.newPityCounter;
-
+ 
       let cardPool = cardsByRarity[rarityToUse];
       if (cardPool.length === 0) {
         const fallbackRarities: RarityType[] = ["COMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC", "SECRET"];
@@ -67,40 +69,53 @@ export async function POST(req: Request) {
           }
         }
       }
-
+ 
       if (cardPool.length === 0) {
         return NextResponse.json({ success: false, error: "Không tìm thấy thẻ bài hợp lệ để rút" }, { status: 500 });
       }
-
+ 
       const randomIndex = Math.floor(Math.random() * cardPool.length);
       const selectedCard = cardPool[randomIndex];
-
+ 
       pulledCards.push(selectedCard);
-
+ 
       if (["LEGENDARY", "MYTHIC", "SECRET"].includes(selectedCard.rarity)) {
         containsLegendaryOrBetter = true;
       }
-
+      if (selectedCard.rarity === "MYTHIC") {
+        containsMythic = true;
+      }
+      if (selectedCard.rarity === "SECRET") {
+        containsSecret = true;
+      }
+ 
       await UserCard.findOneAndUpdate(
         { userId: user._id, cardId: selectedCard._id },
         { $inc: { quantity: 1 } },
         { upsert: true, new: true }
       );
     }
-
+ 
     if (!isAdmin) {
       user.rollsLeft -= amount;
     }
     user.totalRolls += amount;
     user.pityCounter = currentPity;
     await user.save();
-
-    await updateMissionProgress(user._id, "daily_roll_3", amount);
-
+ 
+    await updateMissionProgress(user._id, "daily_roll_5", amount);
+    await updateMissionProgress(user._id, "daily_roll_10", amount);
+ 
     if (containsLegendaryOrBetter) {
       await updateMissionProgress(user._id, "first_legendary", 1);
     }
-
+    if (containsMythic) {
+      await updateMissionProgress(user._id, "collect_mythic", 1);
+    }
+    if (containsSecret) {
+      await updateMissionProgress(user._id, "collect_secret", 1);
+    }
+ 
     await updateCollectionAchievement(user._id);
 
     return NextResponse.json({

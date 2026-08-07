@@ -105,6 +105,7 @@ export default function RedeemPage() {
       const data = await res.json();
       if (data.success) {
         setMessage({ text: data.message, type: "success" });
+        window.dispatchEvent(new Event("user-balance-updated"));
         await fetchRedeemData();
       } else {
         setMessage({ text: data.error || "Quy đổi thất bại", type: "error" });
@@ -141,6 +142,7 @@ export default function RedeemPage() {
       const data = await res.json();
       if (data.success) {
         setMessage({ text: data.message, type: "success" });
+        window.dispatchEvent(new Event("user-balance-updated"));
         await fetchRedeemData();
       } else {
         setMessage({ text: data.error || "Đổi quà thất bại", type: "error" });

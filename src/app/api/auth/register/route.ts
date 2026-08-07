@@ -24,9 +24,10 @@ export async function POST(req: Request) {
       passwordHash,
       displayName,
       role: "USER",
-      rollsLeft: 15,
+      rollsLeft: 50,
       totalRolls: 0,
       pityCounter: 0,
+      lastRollRegenTime: new Date(),
     });
 
     return NextResponse.json({

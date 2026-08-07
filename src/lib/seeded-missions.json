@@ -4,39 +4,79 @@
     "description": "Đăng nhập vào hệ thống mỗi ngày để nhận lượt rút",
     "type": "DAILY",
     "target": 1,
-    "rewardRolls": 3,
+    "rewardRolls": 1,
     "key": "daily_login"
   },
   {
-    "title": "Kẻ cuồng rút bài",
-    "description": "Rút bài 3 lần trong ngày",
+    "title": "Người rút bài nghiệp dư",
+    "description": "Rút bài 5 lần trong ngày",
     "type": "DAILY",
-    "target": 3,
-    "rewardRolls": 5,
-    "key": "daily_roll_3"
+    "target": 5,
+    "rewardRolls": 2,
+    "key": "daily_roll_5"
+  },
+  {
+    "title": "Người rút bài chuyên nghiệp",
+    "description": "Rút bài 10 lần trong ngày",
+    "type": "DAILY",
+    "target": 10,
+    "rewardRolls": 3,
+    "key": "daily_roll_10"
   },
   {
     "title": "Khoe bộ sưu tập",
     "description": "Chia sẻ album của bạn với bạn bè",
     "type": "DAILY",
     "target": 1,
-    "rewardRolls": 2,
+    "rewardRolls": 1,
     "key": "daily_share"
+  },
+  {
+    "title": "Tái chế bảo vệ môi trường",
+    "description": "Tái chế thẻ bài thừa 1 lần",
+    "type": "DAILY",
+    "target": 1,
+    "rewardRolls": 2,
+    "key": "daily_recycle_1"
   },
   {
     "title": "Nhà sưu tầm nghiệp dư",
     "description": "Sưu tập được 20 thẻ bài khác nhau",
     "type": "ACHIEVEMENT",
     "target": 20,
-    "rewardRolls": 15,
+    "rewardRolls": 5,
     "key": "collect_20"
+  },
+  {
+    "title": "Nhà sưu tầm chuyên nghiệp",
+    "description": "Sưu tập được 40 thẻ bài khác nhau",
+    "type": "ACHIEVEMENT",
+    "target": 40,
+    "rewardRolls": 10,
+    "key": "collect_40"
   },
   {
     "title": "Khoảnh khắc lịch sử",
     "description": "Sở hữu thẻ Legendary đầu tiên",
     "type": "ACHIEVEMENT",
     "target": 1,
-    "rewardRolls": 10,
+    "rewardRolls": 5,
     "key": "first_legendary"
+  },
+  {
+    "title": "Huyền thoại Gacha",
+    "description": "Sở hữu thẻ Mythic đầu tiên",
+    "type": "ACHIEVEMENT",
+    "target": 1,
+    "rewardRolls": 10,
+    "key": "collect_mythic"
+  },
+  {
+    "title": "Bí ẩn vũ trụ",
+    "description": "Sở hữu thẻ Secret đầu tiên",
+    "type": "ACHIEVEMENT",
+    "target": 1,
+    "rewardRolls": 15,
+    "key": "collect_secret"
   }
 ]
