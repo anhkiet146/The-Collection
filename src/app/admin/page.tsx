@@ -13,6 +13,48 @@ interface CardInfo {
   album: string;
 }
 
+const compressImage = (file: File, maxWidth = 800, quality = 0.8): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Could not get canvas context"));
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error("Canvas toBlob returned null"));
+          },
+          "image/webp",
+          quality
+        );
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
+
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -84,14 +126,22 @@ export default function AdminPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setImageFile(file);
     setUploadingImage(true);
     setMessage(null);
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
+      // Compress image client-side to maximum 800px width with 80% WebP quality
+      const compressedBlob = await compressImage(file, 800, 0.8);
+      const cleanFileName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+      const compressedFile = new File([compressedBlob], `${cleanFileName}.webp`, {
+        type: "image/webp",
+      });
+
+      setImageFile(compressedFile);
+
+      const formData = new FormData();
+      formData.append("file", compressedFile);
+
       const res = await fetch("/api/cards/upload", {
         method: "POST",
         body: formData,
@@ -102,8 +152,9 @@ export default function AdminPage() {
       } else {
         setMessage({ text: data.error || "Tải ảnh lên thất bại", type: "error" });
       }
-    } catch {
-      setMessage({ text: "Lỗi kết nối tải tệp", type: "error" });
+    } catch (err: any) {
+      console.error(err);
+      setMessage({ text: "Lỗi xử lý nén hoặc tải tệp", type: "error" });
     } finally {
       setUploadingImage(false);
     }
