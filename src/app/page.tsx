@@ -75,14 +75,14 @@ export default function HomePage() {
       });
       const data = await res.json();
       if (data.success) {
-        // Wait for the pull animation to build suspense (2.2 seconds)
+        // Wait for the pull animation to build suspense (0.8 seconds)
         setTimeout(() => {
           setRolledCards(data.pulledCards);
           setUser(data.user);
           setAnimationPhase("revealing");
           // Trigger header sync
           window.dispatchEvent(new Event("user-balance-updated"));
-        }, 2200);
+        }, 800);
       } else {
         setError(data.error || "Rút thẻ thất bại");
         setAnimationPhase("idle");

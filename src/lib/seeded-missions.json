@@ -4,7 +4,7 @@
     "description": "Đăng nhập vào hệ thống mỗi ngày để nhận lượt rút",
     "type": "DAILY",
     "target": 1,
-    "rewardRolls": 1,
+    "rewardRolls": 5,
     "key": "daily_login"
   },
   {
@@ -12,7 +12,7 @@
     "description": "Rút bài 5 lần trong ngày",
     "type": "DAILY",
     "target": 5,
-    "rewardRolls": 2,
+    "rewardRolls": 6,
     "key": "daily_roll_5"
   },
   {
@@ -20,7 +20,7 @@
     "description": "Rút bài 10 lần trong ngày",
     "type": "DAILY",
     "target": 10,
-    "rewardRolls": 3,
+    "rewardRolls": 8,
     "key": "daily_roll_10"
   },
   {
@@ -28,7 +28,7 @@
     "description": "Chia sẻ album của bạn với bạn bè",
     "type": "DAILY",
     "target": 1,
-    "rewardRolls": 1,
+    "rewardRolls": 5,
     "key": "daily_share"
   },
   {
@@ -36,7 +36,7 @@
     "description": "Tái chế thẻ bài thừa 1 lần",
     "type": "DAILY",
     "target": 1,
-    "rewardRolls": 2,
+    "rewardRolls": 6,
     "key": "daily_recycle_1"
   },
   {
@@ -44,7 +44,7 @@
     "description": "Sưu tập được 20 thẻ bài khác nhau",
     "type": "ACHIEVEMENT",
     "target": 20,
-    "rewardRolls": 5,
+    "rewardRolls": 8,
     "key": "collect_20"
   },
   {
@@ -60,7 +60,7 @@
     "description": "Sở hữu thẻ Legendary đầu tiên",
     "type": "ACHIEVEMENT",
     "target": 1,
-    "rewardRolls": 5,
+    "rewardRolls": 8,
     "key": "first_legendary"
   },
   {
@@ -76,7 +76,7 @@
     "description": "Sở hữu thẻ Secret đầu tiên",
     "type": "ACHIEVEMENT",
     "target": 1,
-    "rewardRolls": 15,
+    "rewardRolls": 10,
     "key": "collect_secret"
   }
 ]
