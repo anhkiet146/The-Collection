@@ -22,9 +22,13 @@ export default function Header() {
   useEffect(() => {
     fetchUser();
 
+    // Periodically refetch user balance to show regeneration in real-time (every 30 seconds)
+    const interval = setInterval(fetchUser, 30000);
+
     // Listen to custom balance update events to sync instantly
     window.addEventListener("user-balance-updated", fetchUser);
     return () => {
+      clearInterval(interval);
       window.removeEventListener("user-balance-updated", fetchUser);
     };
   }, [pathname]);
@@ -118,7 +122,7 @@ export default function Header() {
               <div className="h-2.5 w-[1px] bg-zinc-200" />
               <div className="flex items-center gap-0.5">
                 <span className="text-zinc-400 font-medium">Pity:</span>
-                <span className="text-zinc-800 font-bold">{user.pityCounter}</span>
+                <span className="text-zinc-800 font-bold">{user.pityCounter}/60</span>
               </div>
             </div>
 
