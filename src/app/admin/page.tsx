@@ -586,6 +586,7 @@ export default function AdminPage() {
                           src={card.imageUrl}
                           alt={card.title}
                           className="w-12 h-8 object-cover rounded border border-zinc-200 bg-zinc-50"
+                          loading="lazy"
                         />
                       </td>
                       <td className="py-3 px-4 font-semibold text-zinc-800 truncate max-w-[150px]">{card.title}</td>

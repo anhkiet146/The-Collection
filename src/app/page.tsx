@@ -372,6 +372,7 @@ export default function HomePage() {
                             src={card.imageUrl || "/placeholder.png"}
                             alt={card.title}
                             className="w-full h-full object-cover animate-fade-in"
+                            loading="lazy"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
                               e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="75" r="16" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M92,75 L108,75 M100,67 L100,83" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`;

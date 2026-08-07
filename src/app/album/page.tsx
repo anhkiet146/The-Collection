@@ -313,6 +313,7 @@ export default function AlbumPage() {
                             src={canSeeCard ? (card.imageUrl || "/placeholder.png") : `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="133" r="20" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`}
                             alt={card.title}
                             className="w-full h-full object-cover animate-fade-in"
+                            loading="lazy"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
                               e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="133" r="20" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`;
