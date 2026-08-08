@@ -96,6 +96,18 @@ export default function AlbumPage() {
     }
   };
 
+  const getRarityTextColor = (rarity: string) => {
+    switch (rarity) {
+      case "COMMON": return "text-zinc-400 font-bold";
+      case "RARE": return "text-blue-400 font-bold";
+      case "EPIC": return "text-purple-400 font-bold";
+      case "LEGENDARY": return "text-rarity-legendary";
+      case "MYTHIC": return "text-rarity-mythic";
+      case "SECRET": return "text-rarity-secret";
+      default: return "text-zinc-500 font-bold";
+    }
+  };
+
   // 1. Filter cards
   const filteredCards = cards.filter((card) => {
     const matchesSearch = card.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -300,37 +312,37 @@ export default function AlbumPage() {
                         }`}
                       >
                         {/* Rarity */}
-                        <div className="flex justify-between items-center text-[9px] font-semibold text-zinc-400 mb-2">
-                          <span className="truncate max-w-[85px] uppercase tracking-wider">{card.album}</span>
-                          <span className="font-semibold uppercase tracking-widest">
+                        <div className="flex justify-between items-center text-[9px] font-semibold mb-2">
+                          <span className="truncate max-w-[85px] uppercase tracking-wider text-zinc-500">{card.album}</span>
+                          <span className={`uppercase tracking-widest ${getRarityTextColor(card.rarity)}`}>
                             {getRarityLabel(card.rarity)}
                           </span>
                         </div>
-
+ 
                         {/* Image */}
-                        <div className="flex items-center justify-center bg-zinc-50 border border-zinc-150 rounded overflow-hidden aspect-[3/4] relative mb-3">
+                        <div className="flex items-center justify-center bg-zinc-950/40 border border-zinc-800/80 rounded overflow-hidden aspect-[3/4] relative mb-3">
                           <img
-                            src={canSeeCard ? (card.imageUrl || "/placeholder.png") : `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="133" r="20" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`}
+                            src={canSeeCard ? (card.imageUrl || "/placeholder.png") : `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%2318181b"/><circle cx="100" cy="133" r="20" fill="none" stroke="%2327272a" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%2327272a" stroke-width="1.5"/></svg>`}
                             alt={card.title}
                             className="w-full h-full object-cover animate-fade-in"
                             loading="lazy"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
-                              e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="133" r="20" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`;
+                              e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%2318181b"/><circle cx="100" cy="133" r="20" fill="none" stroke="%2327272a" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%2327272a" stroke-width="1.5"/></svg>`;
                             }}
                           />
-
+ 
                           {isUnlocked && card.quantity > 1 && (
                             <div className="absolute top-2 right-2 bg-zinc-900/90 border border-zinc-950 text-[10px] text-white font-semibold px-2 py-0.5 rounded-full select-none">
                               x{card.quantity}
                             </div>
                           )}
                         </div>
-
+ 
                         {/* Content */}
                         <div className="flex flex-col gap-1.5">
-                          <h3 className="text-sm font-semibold text-zinc-900 truncate">{card.title}</h3>
-                          <p className="text-[10px] text-zinc-550 line-clamp-2 leading-relaxed font-light">
+                          <h3 className="text-sm font-semibold text-zinc-100 truncate">{card.title}</h3>
+                          <p className="text-[10px] text-zinc-400 line-clamp-2 leading-relaxed font-light">
                             {canSeeCard
                               ? card.description || "Không có mô tả chi tiết."
                               : "Khóa: Rút thẻ để mở khóa thông tin."}

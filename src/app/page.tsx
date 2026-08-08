@@ -159,6 +159,18 @@ export default function HomePage() {
     }
   };
 
+  const getRarityTextColor = (rarity: string) => {
+    switch (rarity) {
+      case "COMMON": return "text-zinc-400 font-bold";
+      case "RARE": return "text-blue-400 font-bold";
+      case "EPIC": return "text-purple-400 font-bold";
+      case "LEGENDARY": return "text-rarity-legendary";
+      case "MYTHIC": return "text-rarity-mythic";
+      case "SECRET": return "text-rarity-secret";
+      default: return "text-zinc-500 font-bold";
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-background">
@@ -193,31 +205,31 @@ export default function HomePage() {
               <div className="text-zinc-400 text-[10px] tracking-widest uppercase font-mono mt-2">Pack Phiên Bản Đặc Biệt</div>
               
               <div className="flex flex-col items-center py-4">
-                <div className="w-16 h-16 rounded-full bg-zinc-50 border border-border flex items-center justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-zinc-900/50 border border-zinc-800 flex items-center justify-center mb-4">
                   <Sparkles className="w-7 h-7 text-zinc-400" />
                 </div>
-                <h2 className="text-lg font-medium text-zinc-900 tracking-wide">FRIENDS GACHA</h2>
-                <p className="text-xs text-zinc-500 mt-2 max-w-[180px] leading-relaxed">
+                <h2 className="text-lg font-medium text-zinc-100 tracking-wide">FRIENDS GACHA</h2>
+                <p className="text-xs text-zinc-400 mt-2 max-w-[180px] leading-relaxed">
                   Rút thẻ ngẫu nhiên. Tích luỹ pity để chắc chắn sở hữu Mythic trở lên!
                 </p>
               </div>
-
+ 
               <div className="text-zinc-400 text-[10px] font-mono mb-2">Thẻ bảo hiểm: 60 lượt</div>
             </div>
-
+ 
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
               <button
                 disabled={rolling || (user.role !== "ADMIN" && user.rollsLeft < 1)}
                 onClick={() => handleRoll(1)}
-                className="flex items-center justify-center gap-2 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-800 font-medium py-3 px-6 rounded-md text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed min-w-[160px]"
+                className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-200 font-medium py-3 px-6 rounded-md text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed min-w-[160px]"
               >
-                <Dices className="w-4 h-4 text-zinc-500" />
+                <Dices className="w-4 h-4 text-zinc-400" />
                 Rút 1 Lượt
               </button>
               <button
                 disabled={rolling || (user.role !== "ADMIN" && user.rollsLeft < 10)}
                 onClick={() => handleRoll(10)}
-                className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-950 text-white font-semibold py-3 px-6 rounded-md text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed min-w-[160px] shadow-sm"
+                className="flex items-center justify-center gap-2 bg-zinc-50 hover:bg-zinc-100 text-zinc-950 font-bold py-3 px-6 rounded-md text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed min-w-[160px] shadow-sm"
               >
                 <Layers className="w-4 h-4" />
                 Rút 10 Lượt
@@ -364,12 +376,12 @@ export default function HomePage() {
                       <div
                         className={`absolute inset-0 bg-card border-2 ${rarityColorClass} ${isFlipped ? glowClass : ""} rounded-lg overflow-hidden backface-hidden rotate-y-180 flex flex-col p-3 justify-between shadow-lg`}
                       >
-                        <div className="flex justify-between items-center text-[9px] font-semibold text-zinc-400">
-                          <span className="truncate max-w-[80px] uppercase tracking-wider">{card.album}</span>
-                          <span className="font-semibold uppercase tracking-widest">{getRarityLabel(card.rarity)}</span>
+                        <div className="flex justify-between items-center text-[9px] font-semibold">
+                          <span className="truncate max-w-[80px] uppercase tracking-wider text-zinc-500">{card.album}</span>
+                          <span className={`uppercase tracking-widest ${getRarityTextColor(card.rarity)}`}>{getRarityLabel(card.rarity)}</span>
                         </div>
-
-                        <div className="my-2 flex-grow flex items-center justify-center bg-zinc-50 border border-zinc-100 rounded overflow-hidden aspect-video">
+ 
+                        <div className="my-2 flex-grow flex items-center justify-center bg-zinc-950/40 border border-zinc-800/80 rounded overflow-hidden aspect-video">
                           <img
                             src={card.imageUrl || "/placeholder.png"}
                             alt={card.title}
@@ -377,14 +389,14 @@ export default function HomePage() {
                             loading="lazy"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
-                              e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="75" r="16" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M92,75 L108,75 M100,67 L100,83" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`;
+                              e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"><rect width="100%" height="100%" fill="%2318181b"/><circle cx="100" cy="75" r="16" fill="none" stroke="%2327272a" stroke-width="1.5"/><path d="M92,75 L108,75 M100,67 L100,83" stroke="%2327272a" stroke-width="1.5"/></svg>`;
                             }}
                           />
                         </div>
-
+ 
                         <div>
-                          <h3 className="text-sm font-semibold text-zinc-900 truncate leading-snug">{card.title}</h3>
-                          <p className="text-[10px] text-zinc-500 mt-1 line-clamp-2 leading-relaxed font-light">
+                          <h3 className="text-sm font-semibold text-zinc-100 truncate leading-snug">{card.title}</h3>
+                          <p className="text-[10px] text-zinc-400 mt-1 line-clamp-2 leading-relaxed font-light">
                             {card.description || "Không có mô tả chi tiết."}
                           </p>
                         </div>
