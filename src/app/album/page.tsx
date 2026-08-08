@@ -74,13 +74,13 @@ export default function AlbumPage() {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "COMMON": return "border-zinc-300 text-zinc-550 bg-zinc-50";
-      case "RARE": return "border-blue-400 text-blue-700 bg-blue-50/70";
-      case "EPIC": return "border-purple-400 text-purple-700 bg-purple-50/70";
-      case "LEGENDARY": return "border-amber-400 text-amber-700 bg-amber-50/70";
-      case "MYTHIC": return "border-red-500 text-red-700 bg-red-50/70";
+      case "COMMON": return "border-zinc-400 text-zinc-650 bg-zinc-50/90";
+      case "RARE": return "border-blue-500 text-blue-700 bg-blue-50/70";
+      case "EPIC": return "border-purple-500 text-purple-700 bg-purple-50/70";
+      case "LEGENDARY": return "border-amber-500 text-amber-700 bg-amber-50/70 shadow-sm";
+      case "MYTHIC": return "border-red-550 text-red-700 bg-red-50/70 shadow-sm";
       case "SECRET": return "card-secret-front text-pink-700 shadow-md";
-      default: return "border-zinc-200 text-zinc-400";
+      default: return "border-zinc-300 text-zinc-400";
     }
   };
 
@@ -293,7 +293,7 @@ export default function AlbumPage() {
                     return (
                       <div
                         key={card.id}
-                        className={`relative group bg-card border ${rarityColorClass} rounded-lg overflow-hidden flex flex-col p-3 justify-between transition-all duration-300 ${
+                        className={`relative group bg-card border-2 ${rarityColorClass} rounded-lg overflow-hidden flex flex-col p-3 justify-between transition-all duration-300 ${
                           isUnlocked
                             ? "opacity-100 hover:scale-[1.02] shadow shadow-zinc-200"
                             : "opacity-45 grayscale hover:grayscale-[50%] hover:opacity-60"

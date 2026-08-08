@@ -125,13 +125,13 @@ export default function HomePage() {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "COMMON": return "border-zinc-300 text-zinc-550 bg-zinc-50";
-      case "RARE": return "border-blue-400 text-blue-600 bg-blue-50/50";
-      case "EPIC": return "border-purple-400 text-purple-600 bg-purple-50/50";
-      case "LEGENDARY": return "border-amber-400 text-amber-600 bg-amber-50/50";
-      case "MYTHIC": return "border-red-500 text-red-650 bg-red-50/50";
+      case "COMMON": return "border-zinc-400 text-zinc-650 bg-zinc-50/90";
+      case "RARE": return "border-blue-500 text-blue-650 bg-blue-50/60";
+      case "EPIC": return "border-purple-500 text-purple-650 bg-purple-50/60";
+      case "LEGENDARY": return "border-amber-500 text-amber-650 bg-amber-50/60 shadow-sm";
+      case "MYTHIC": return "border-red-550 text-red-650 bg-red-50/60 shadow-sm";
       case "SECRET": return "card-secret-front text-pink-600 shadow-md";
-      default: return "border-zinc-200 text-zinc-400";
+      default: return "border-zinc-300 text-zinc-400";
     }
   };
 
@@ -362,7 +362,7 @@ export default function HomePage() {
 
                       {/* CARD FRONT */}
                       <div
-                        className={`absolute inset-0 bg-card border ${rarityColorClass} ${isFlipped ? glowClass : ""} rounded-lg overflow-hidden backface-hidden rotate-y-180 flex flex-col p-3 justify-between shadow-lg`}
+                        className={`absolute inset-0 bg-card border-2 ${rarityColorClass} ${isFlipped ? glowClass : ""} rounded-lg overflow-hidden backface-hidden rotate-y-180 flex flex-col p-3 justify-between shadow-lg`}
                       >
                         <div className="flex justify-between items-center text-[9px] font-semibold text-zinc-400">
                           <span className="truncate max-w-[80px] uppercase tracking-wider">{card.album}</span>
