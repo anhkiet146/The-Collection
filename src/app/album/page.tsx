@@ -152,30 +152,30 @@ export default function AlbumPage() {
       {/* Stats Board */}
       <div className="bg-card border border-border p-6 rounded-lg mb-8 flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-zinc-900">BỘ SƯU TẬP ALBUM</h1>
-          <p className="text-xs text-zinc-500 mt-1">
+          <h1 className="text-xl font-bold tracking-tight text-zinc-100">BỘ SƯU TẬP ALBUM</h1>
+          <p className="text-xs text-zinc-450 mt-1">
             Mở khóa các thẻ bài độc đáo để nhận được các danh hiệu và phần thưởng
           </p>
         </div>
         <div className="flex items-center gap-8 w-full md:w-auto justify-between md:justify-end">
           <div className="text-center">
-            <span className="block text-[10px] uppercase text-zinc-400 font-mono tracking-wider">Tiến độ</span>
-            <span className="text-2xl font-bold text-zinc-800 mt-1 block">
+            <span className="block text-[10px] uppercase text-zinc-500 font-mono tracking-wider">Tiến độ</span>
+            <span className="text-2xl font-bold text-zinc-100 mt-1 block">
               {unlockedCardsCount}/{totalCardsCount}
             </span>
           </div>
-          <div className="h-10 w-[1px] bg-zinc-200" />
+          <div className="h-10 w-[1px] bg-zinc-800" />
           <div className="text-center">
-            <span className="block text-[10px] uppercase text-zinc-400 font-mono tracking-wider">Hoàn thành</span>
-            <span className="text-2xl font-bold text-zinc-800 mt-1 block">
+            <span className="block text-[10px] uppercase text-zinc-500 font-mono tracking-wider">Hoàn thành</span>
+            <span className="text-2xl font-bold text-zinc-100 mt-1 block">
               {completionPercentage}%
             </span>
           </div>
-          <div className="h-10 w-[1px] bg-zinc-200" />
+          <div className="h-10 w-[1px] bg-zinc-800" />
           {/* Progress ring/bar indicator */}
-          <div className="w-16 h-2 bg-zinc-100 border border-zinc-200 rounded-full overflow-hidden">
+          <div className="w-16 h-2 bg-zinc-900 border border-zinc-800 rounded-full overflow-hidden">
             <div 
-              className="bg-zinc-800 h-full transition-all duration-500" 
+              className="bg-zinc-100 h-full transition-all duration-500" 
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
@@ -187,34 +187,34 @@ export default function AlbumPage() {
         <div className="flex flex-col md:flex-row gap-3">
           {/* Search */}
           <div className="relative flex-grow">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Tìm kiếm thẻ bài hoặc album..."
-              className="w-full bg-card border border-border rounded-md pl-9 pr-4 py-2 text-sm text-zinc-800 focus:outline-none focus:border-zinc-350 placeholder-zinc-400 transition-colors shadow-sm"
+              className="w-full bg-card border border-border rounded-md pl-9 pr-4 py-2 text-sm text-zinc-100 focus:outline-none focus:border-zinc-700 placeholder-zinc-500 transition-colors shadow-sm"
             />
           </div>
 
           <div className="flex flex-wrap gap-3">
             {/* Lock State Filter */}
-            <div className="flex bg-zinc-100 border border-zinc-200 rounded-md p-0.5 text-xs text-zinc-500">
+            <div className="flex bg-zinc-950 border border-zinc-800 rounded-md p-0.5 text-xs text-zinc-400">
               <button
                 onClick={() => setShowLocked("all")}
-                className={`px-3 py-1.5 rounded-sm transition-all ${showLocked === "all" ? "bg-white text-zinc-950 font-semibold shadow-sm border border-zinc-200/50" : "hover:text-zinc-800"}`}
+                className={`px-3 py-1.5 rounded-sm transition-all ${showLocked === "all" ? "bg-zinc-900 text-zinc-100 font-semibold shadow-sm border border-zinc-800" : "hover:text-zinc-200"}`}
               >
                 Tất cả
               </button>
               <button
                 onClick={() => setShowLocked("unlocked")}
-                className={`px-3 py-1.5 rounded-sm transition-all ${showLocked === "unlocked" ? "bg-white text-zinc-950 font-semibold shadow-sm border border-zinc-200/50" : "hover:text-zinc-800"}`}
+                className={`px-3 py-1.5 rounded-sm transition-all ${showLocked === "unlocked" ? "bg-zinc-900 text-zinc-100 font-semibold shadow-sm border border-zinc-800" : "hover:text-zinc-200"}`}
               >
                 Đã sở hữu
               </button>
               <button
                 onClick={() => setShowLocked("locked")}
-                className={`px-3 py-1.5 rounded-sm transition-all ${showLocked === "locked" ? "bg-white text-zinc-950 font-semibold shadow-sm border border-zinc-200/50" : "hover:text-zinc-800"}`}
+                className={`px-3 py-1.5 rounded-sm transition-all ${showLocked === "locked" ? "bg-zinc-900 text-zinc-100 font-semibold shadow-sm border border-zinc-800" : "hover:text-zinc-200"}`}
               >
                 Chưa sở hữu
               </button>
@@ -222,15 +222,15 @@ export default function AlbumPage() {
 
             {/* Sort Selection */}
             <div className="flex items-center bg-card border border-border rounded-md px-3 py-1 text-xs gap-2 shadow-sm">
-              <ArrowUpDown className="w-3.5 h-3.5 text-zinc-400" />
+              <ArrowUpDown className="w-3.5 h-3.5 text-zinc-500" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-transparent text-zinc-700 focus:outline-none border-none cursor-pointer"
+                className="bg-transparent text-zinc-200 focus:outline-none border-none cursor-pointer"
               >
-                <option value="newest" className="bg-card text-zinc-800">Mới nhất</option>
-                <option value="title" className="bg-card text-zinc-800">Tên thẻ (A-Z)</option>
-                <option value="rarity" className="bg-card text-zinc-800">Độ hiếm</option>
+                <option value="newest" className="bg-zinc-900 text-zinc-200">Mới nhất</option>
+                <option value="title" className="bg-zinc-900 text-zinc-200">Tên thẻ (A-Z)</option>
+                <option value="rarity" className="bg-zinc-900 text-zinc-200">Độ hiếm</option>
               </select>
             </div>
           </div>
@@ -244,8 +244,8 @@ export default function AlbumPage() {
               onClick={() => setRarityFilter(rarity)}
               className={`px-3 py-1 text-xs rounded-full border transition-all ${
                 rarityFilter === rarity
-                  ? "bg-zinc-900 border-zinc-900 text-white font-medium shadow-sm"
-                  : "bg-transparent border-zinc-200 text-zinc-500 hover:border-zinc-300 hover:text-zinc-800"
+                  ? "bg-zinc-100 border-zinc-100 text-zinc-950 font-semibold shadow-sm"
+                  : "bg-transparent border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
               }`}
             >
               {rarity === "ALL" ? "Tất cả độ hiếm" : getRarityLabel(rarity)}
@@ -277,18 +277,18 @@ export default function AlbumPage() {
                 {/* Album Group Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-2 gap-2">
                   <div className="flex items-center gap-3">
-                    <h2 className="text-base font-bold text-zinc-900 tracking-wide uppercase">
+                    <h2 className="text-base font-bold text-zinc-100 tracking-wide uppercase">
                       Bộ sưu tập: {albumName}
                     </h2>
-                    <span className="text-[10px] bg-zinc-100 border border-border text-zinc-500 font-medium px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400 font-medium px-2 py-0.5 rounded-full">
                       {albumUnlocked}/{albumTotal} thẻ
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-zinc-500 font-mono">Hoàn thành: {albumPct}%</span>
-                    <div className="w-20 h-1.5 bg-zinc-100 border border-zinc-200 rounded-full overflow-hidden">
+                    <span className="text-xs text-zinc-400 font-mono">Hoàn thành: {albumPct}%</span>
+                    <div className="w-20 h-1.5 bg-zinc-900 border border-zinc-800 rounded-full overflow-hidden">
                       <div
-                        className="bg-zinc-800 h-full transition-all duration-300"
+                        className="bg-zinc-100 h-full transition-all duration-300"
                         style={{ width: `${albumPct}%` }}
                       />
                     </div>

@@ -284,19 +284,19 @@ export default function HomePage() {
             className="w-full flex flex-col items-center py-4"
           >
             <div className="w-full max-w-6xl flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-              <h2 className="text-sm font-mono text-zinc-500 font-semibold">
+              <h2 className="text-sm font-mono text-zinc-400 font-semibold">
                 KẾT QUẢ RÚT THẺ ({rolledCards.length} THẺ)
               </h2>
               <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
                 <button
                   onClick={handleRevealAll}
-                  className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors font-medium mr-2"
+                  className="text-xs text-zinc-400 hover:text-zinc-100 transition-colors font-medium mr-2"
                 >
                   Lật tất cả
                 </button>
                 <button
                   onClick={handleGoBack}
-                  className="text-xs bg-zinc-100 border border-zinc-200 text-zinc-800 py-1.5 px-3.5 rounded-md hover:bg-zinc-200 transition-colors font-semibold shadow-sm"
+                  className="text-xs bg-zinc-900 border border-zinc-800 text-zinc-200 py-1.5 px-3.5 rounded-md hover:bg-zinc-850 transition-colors font-semibold shadow-sm"
                 >
                   Trở lại
                 </button>
