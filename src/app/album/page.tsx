@@ -74,13 +74,13 @@ export default function AlbumPage() {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "COMMON": return "border-zinc-400 text-zinc-650 bg-zinc-50/90";
-      case "RARE": return "border-blue-500 text-blue-700 bg-blue-50/70";
-      case "EPIC": return "border-purple-500 text-purple-700 bg-purple-50/70";
-      case "LEGENDARY": return "border-amber-500 text-amber-700 bg-amber-50/70 shadow-sm";
-      case "MYTHIC": return "border-red-550 text-red-700 bg-red-50/70 shadow-sm";
+      case "COMMON": return "border-2 border-zinc-300 text-zinc-600 bg-zinc-50/80";
+      case "RARE": return "border-2 border-blue-400 text-blue-700 bg-blue-50/70";
+      case "EPIC": return "border-2 border-purple-400 text-purple-700 bg-purple-50/70";
+      case "LEGENDARY": return "border-2 border-amber-400 text-amber-700 bg-amber-50/70 shadow-sm";
+      case "MYTHIC": return "border-2 border-red-500 text-red-700 bg-red-50/70 shadow-sm";
       case "SECRET": return "card-secret-front text-pink-700 shadow-md";
-      default: return "border-zinc-300 text-zinc-400";
+      default: return "border-2 border-zinc-200 text-zinc-400";
     }
   };
 
@@ -305,7 +305,7 @@ export default function AlbumPage() {
                     return (
                       <div
                         key={card.id}
-                        className={`relative group bg-card border-2 ${rarityColorClass} rounded-lg overflow-hidden flex flex-col p-3 justify-between transition-all duration-300 ${
+                        className={`relative group bg-card ${rarityColorClass} rounded-lg overflow-hidden flex flex-col p-3 justify-between transition-all duration-300 ${
                           isUnlocked
                             ? "opacity-100 hover:scale-[1.02] shadow shadow-zinc-200"
                             : "opacity-45 grayscale hover:grayscale-[50%] hover:opacity-60"
@@ -320,15 +320,15 @@ export default function AlbumPage() {
                         </div>
  
                         {/* Image */}
-                        <div className="flex items-center justify-center bg-zinc-950/40 border border-zinc-800/80 rounded overflow-hidden aspect-[3/4] relative mb-3">
+                        <div className="flex items-center justify-center bg-zinc-50 border border-zinc-150 rounded overflow-hidden aspect-[3/4] relative mb-3">
                           <img
-                            src={canSeeCard ? (card.imageUrl || "/placeholder.png") : `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%2318181b"/><circle cx="100" cy="133" r="20" fill="none" stroke="%2327272a" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%2327272a" stroke-width="1.5"/></svg>`}
+                            src={canSeeCard ? (card.imageUrl || "/placeholder.png") : `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="133" r="20" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`}
                             alt={card.title}
                             className="w-full h-full object-cover animate-fade-in"
                             loading="lazy"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
-                              e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%2318181b"/><circle cx="100" cy="133" r="20" fill="none" stroke="%2327272a" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%2327272a" stroke-width="1.5"/></svg>`;
+                              e.currentTarget.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267"><rect width="100%" height="100%" fill="%23f4f4f5"/><circle cx="100" cy="133" r="20" fill="none" stroke="%23e4e4e7" stroke-width="1.5"/><path d="M90,133 L110,133 M100,123 L100,143" stroke="%23e4e4e7" stroke-width="1.5"/></svg>`;
                             }}
                           />
  
@@ -341,8 +341,8 @@ export default function AlbumPage() {
  
                         {/* Content */}
                         <div className="flex flex-col gap-1.5">
-                          <h3 className="text-sm font-semibold text-zinc-100 truncate">{card.title}</h3>
-                          <p className="text-[10px] text-zinc-400 line-clamp-2 leading-relaxed font-light">
+                          <h3 className="text-sm font-semibold text-zinc-900 truncate">{card.title}</h3>
+                          <p className="text-[10px] text-zinc-550 line-clamp-2 leading-relaxed font-light">
                             {canSeeCard
                               ? card.description || "Không có mô tả chi tiết."
                               : "Khóa: Rút thẻ để mở khóa thông tin."}
