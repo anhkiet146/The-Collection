@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { LogOut, ShieldAlert, Sparkles, Menu, X } from "lucide-react";
+import { LogOut, ShieldAlert, Sparkles, Menu, X, BookOpen, Dices } from "lucide-react";
 
 interface UserInfo {
   username: string;
@@ -79,9 +79,15 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-6">
             <Link 
               href="/" 
-              className={`text-sm font-medium transition-colors ${pathname === "/" ? "text-zinc-950 font-semibold" : "text-zinc-500 hover:text-zinc-800"}`}
+              className={`text-sm font-medium flex items-center gap-1.5 transition-colors ${pathname === "/" || pathname.startsWith("/stories") ? "text-zinc-950 font-bold" : "text-zinc-500 hover:text-zinc-800"}`}
             >
-              Rút Thẻ
+              <BookOpen className="w-4 h-4 text-amber-600" /> Đọc Truyện
+            </Link>
+            <Link 
+              href="/gacha" 
+              className={`text-sm font-medium flex items-center gap-1.5 transition-colors ${pathname === "/gacha" ? "text-zinc-950 font-bold" : "text-zinc-500 hover:text-zinc-800"}`}
+            >
+              <Dices className="w-4 h-4 text-zinc-500" /> Rút Thẻ
             </Link>
             <Link 
               href="/album" 
@@ -166,9 +172,16 @@ export default function Header() {
           <Link 
             href="/" 
             onClick={() => setMobileMenuOpen(false)}
-            className={`text-sm py-2 px-3 rounded-md transition-colors ${pathname === "/" ? "bg-zinc-100 text-zinc-900 font-medium" : "text-zinc-500 hover:bg-zinc-50"}`}
+            className={`text-sm py-2 px-3 rounded-md flex items-center gap-2 transition-colors ${pathname === "/" || pathname.startsWith("/stories") ? "bg-zinc-100 text-zinc-900 font-bold" : "text-zinc-600 hover:bg-zinc-50"}`}
           >
-            Rút Thẻ
+            <BookOpen className="w-4 h-4 text-amber-600" /> Đọc Truyện
+          </Link>
+          <Link 
+            href="/gacha" 
+            onClick={() => setMobileMenuOpen(false)}
+            className={`text-sm py-2 px-3 rounded-md flex items-center gap-2 transition-colors ${pathname === "/gacha" ? "bg-zinc-100 text-zinc-900 font-bold" : "text-zinc-600 hover:bg-zinc-50"}`}
+          >
+            <Dices className="w-4 h-4 text-zinc-500" /> Rút Thẻ
           </Link>
           <Link 
             href="/album" 

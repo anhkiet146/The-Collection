@@ -60,6 +60,29 @@ export interface IRedemption extends Document {
   updatedAt: Date;
 }
 
+export interface IStory extends Document {
+  title: string;
+  author: string;
+  description: string;
+  coverImage: string;
+  category: string;
+  status: "ONGOING" | "COMPLETED";
+  views: number;
+  totalChapters: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IChapter extends Document {
+  storyId: mongoose.Types.ObjectId;
+  chapterNumber: number;
+  title: string;
+  content: string;
+  wordCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const UserSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, unique: true, index: true },
@@ -132,9 +155,37 @@ const RedemptionSchema = new Schema<IRedemption>(
   { timestamps: true }
 );
 
+const StorySchema = new Schema<IStory>(
+  {
+    title: { type: String, required: true, index: true },
+    author: { type: String, default: "Admin" },
+    description: { type: String, default: "" },
+    coverImage: { type: String, default: "" },
+    category: { type: String, default: "Huyền Huyễn", index: true },
+    status: { type: String, enum: ["ONGOING", "COMPLETED"], default: "ONGOING" },
+    views: { type: Number, default: 0 },
+    totalChapters: { type: Number, default: 0 },
+  },
+  { timestamps: true }
+);
+
+const ChapterSchema = new Schema<IChapter>(
+  {
+    storyId: { type: Schema.Types.ObjectId, ref: "Story", required: true, index: true },
+    chapterNumber: { type: Number, required: true },
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    wordCount: { type: Number, default: 0 },
+  },
+  { timestamps: true }
+);
+ChapterSchema.index({ storyId: 1, chapterNumber: 1 }, { unique: true });
+
 export const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
 export const Card: Model<ICard> = mongoose.models.Card || mongoose.model<ICard>("Card", CardSchema);
 export const UserCard: Model<IUserCard> = mongoose.models.UserCard || mongoose.model<IUserCard>("UserCard", UserCardSchema);
 export const Mission: Model<IMission> = mongoose.models.Mission || mongoose.model<IMission>("Mission", MissionSchema);
 export const UserMission: Model<IUserMission> = mongoose.models.UserMission || mongoose.model<IUserMission>("UserMission", UserMissionSchema);
 export const Redemption: Model<IRedemption> = mongoose.models.Redemption || mongoose.model<IRedemption>("Redemption", RedemptionSchema);
+export const Story: Model<IStory> = mongoose.models.Story || mongoose.model<IStory>("Story", StorySchema);
+export const Chapter: Model<IChapter> = mongoose.models.Chapter || mongoose.model<IChapter>("Chapter", ChapterSchema);

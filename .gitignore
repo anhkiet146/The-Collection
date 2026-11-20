@@ -26,6 +26,11 @@ yarn-error.log*
 .env*.local
 .env
 
+# mongo data & logs
+mongo-data/
+*.log
+mongod.log
+
 # vercel
 .vercel
 
