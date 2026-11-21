@@ -4,19 +4,42 @@
 
 @layer base {
   :root {
-    --background: #f9f9fb;
+    --background: #f8f8f6;
     --foreground: #09090b;
     --card: #ffffff;
     --card-hover: #f4f4f5;
-    --border: #e4e4e7;
+    --border: #deded9;
     --accent: #09090b;
     --accent-foreground: #ffffff;
+  }
+
+  ::selection {
+    background: #18181b;
+    color: #fff;
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+}
+
+@layer components {
+  .editorial-title {
+    @apply font-serif;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .editorial-action {
+    @apply inline-flex items-center gap-2 border border-current px-3 py-2 text-sm font-medium transition-colors hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4;
+  }
+
+  .editorial-action-filled {
+    @apply border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-700 hover:opacity-100;
   }
 }
 

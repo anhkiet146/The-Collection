@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Story, Chapter } from "@/lib/models";
 import { getSessionUser } from "@/lib/auth";
+import { normalizeStoryFields, normalizeStoryText } from "@/lib/story-text";
 
 // Default seed story if collection is empty
 const defaultStory = {
@@ -112,7 +113,7 @@ export async function GET(req: NextRequest) {
 
     const stories = await Story.find(query).sort({ updatedAt: -1 }).lean();
 
-    return NextResponse.json({ success: true, stories });
+    return NextResponse.json({ success: true, stories: stories.map(normalizeStoryFields) });
   } catch (error: any) {
     console.error("GET /api/stories error:", error);
     return NextResponse.json({ success: false, error: "Lỗi tải danh sách truyện" }, { status: 500 });
@@ -135,9 +136,9 @@ export async function POST(req: NextRequest) {
     }
 
     const newStory = await Story.create({
-      title: title.trim(),
-      author: author?.trim() || user.displayName || "Admin",
-      description: description?.trim() || "",
+      title: normalizeStoryText(title.trim()),
+      author: normalizeStoryText(author?.trim() || user.displayName || "Admin"),
+      description: normalizeStoryText(description?.trim() || ""),
       coverImage: coverImage?.trim() || "",
       category: category?.trim() || "Huyền Huyễn",
       status: status === "COMPLETED" ? "COMPLETED" : "ONGOING",
@@ -170,9 +171,9 @@ export async function PUT(req: NextRequest) {
     const updatedStory = await Story.findByIdAndUpdate(
       id,
       {
-        title: title?.trim(),
-        author: author?.trim(),
-        description: description?.trim(),
+        title: title == null ? undefined : normalizeStoryText(title.trim()),
+        author: author == null ? undefined : normalizeStoryText(author.trim()),
+        description: description == null ? undefined : normalizeStoryText(description.trim()),
         coverImage: coverImage?.trim(),
         category: category?.trim(),
         status: status === "COMPLETED" ? "COMPLETED" : "ONGOING",

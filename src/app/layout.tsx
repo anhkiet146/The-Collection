@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "Gacha Collection",
-  description: "Trang sưu tập thẻ bài gacha dành cho nhóm bạn",
+  title: "The Collection",
+  description: "Thư viện truyện và bộ sưu tập thẻ bài",
 };
 
 export default function RootLayout({
@@ -13,10 +13,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="dark">
+    <html lang="vi">
       <body className="bg-background text-foreground antialiased min-h-screen">
-        <Header />
-        <main>{children}</main>
+        <Header>
+          <main>{children}</main>
+        </Header>
       </body>
     </html>
   );

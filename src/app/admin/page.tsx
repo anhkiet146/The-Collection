@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { normalizeStoryText } from "@/lib/story-text";
 import {
   Shield,
   Upload,
@@ -156,6 +157,14 @@ export default function AdminPage() {
     checkAdminAndFetchData();
   }, []);
 
+  useEffect(() => {
+    if (loading || !isAdmin) return;
+    const section = window.location.hash.slice(1);
+    if (section === "story-editor" || section === "chapter-editor") {
+      document.getElementById(section)?.scrollIntoView();
+    }
+  }, [loading, isAdmin]);
+
   const checkAdminAndFetchData = async () => {
     try {
       const meRes = await fetch(`/api/auth/me?t=${Date.now()}`);
@@ -164,8 +173,23 @@ export default function AdminPage() {
       if (meData.success && meData.user.role === "ADMIN") {
         setIsAdmin(true);
 
-        // Fetch Stories
-        fetchStoriesList();
+        const query = new URLSearchParams(window.location.search);
+        const storyId = query.get("story");
+        const chapterId = query.get("chapter");
+        const story = (await fetchStoriesList()).find((entry) => entry._id === storyId);
+        if (story && query.get("action") === "edit") {
+          handleEditStory(story, false);
+        } else if (story) {
+          setSelectedStory(story);
+          const storyChapters = await fetchChaptersForStory(story._id);
+          if (chapterId) {
+            const chapter = storyChapters.find((entry) => entry._id === chapterId);
+            if (chapter) handleEditChapter(chapter, false);
+            else setMessage({ text: "Không tìm thấy chương cần sửa.", type: "error" });
+          }
+        } else if (storyId) {
+          setMessage({ text: "Không tìm thấy truyện cần quản trị.", type: "error" });
+        }
 
         // Fetch Cards
         const cardsRes = await fetch(`/api/cards?t=${Date.now()}`);
@@ -190,19 +214,21 @@ export default function AdminPage() {
     }
   };
 
-  const fetchStoriesList = async () => {
+  const fetchStoriesList = async (): Promise<StoryInfo[]> => {
     try {
       const res = await fetch(`/api/stories?t=${Date.now()}`);
       const data = await res.json();
       if (data.success) {
         setStories(data.stories);
+        return data.stories;
       }
     } catch (err) {
       console.error(err);
     }
+    return [];
   };
 
-  const fetchChaptersForStory = async (storyId: string) => {
+  const fetchChaptersForStory = async (storyId: string): Promise<ChapterInfo[]> => {
     setLoadingChapters(true);
     try {
       const res = await fetch(`/api/stories/${storyId}/chapters?t=${Date.now()}`);
@@ -216,12 +242,14 @@ export default function AdminPage() {
         } else {
           setChapterNumber(1);
         }
+        return data.chapters || [];
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoadingChapters(false);
     }
+    return [];
   };
 
   // ================= STORY FORM HANDLERS =================
@@ -270,7 +298,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleEditStory = (story: StoryInfo) => {
+  const handleEditStory = (story: StoryInfo, scroll = true) => {
     setEditingStoryId(story._id);
     setStoryTitle(story.title);
     setStoryAuthor(story.author);
@@ -278,7 +306,7 @@ export default function AdminPage() {
     setStoryStatus(story.status);
     setStoryCoverImage(story.coverImage || "");
     setStoryDescription(story.description || "");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (scroll) window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDeleteStory = async (storyId: string) => {
@@ -382,13 +410,13 @@ export default function AdminPage() {
     }
   };
 
-  const handleEditChapter = (ch: ChapterInfo) => {
+  const handleEditChapter = (ch: ChapterInfo, scroll = true) => {
     setEditingChapterId(ch._id);
     setChapterNumber(ch.chapterNumber);
     setChapterTitle(ch.title);
     setChapterContent(ch.content);
     setPreviewChapter(false);
-    window.scrollTo({ top: 300, behavior: "smooth" });
+    if (scroll) window.scrollTo({ top: 300, behavior: "smooth" });
   };
 
   const handleDeleteChapter = async (chId: string) => {
@@ -628,8 +656,8 @@ export default function AdminPage() {
       {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-2">
-            <Shield className="w-6 h-6 text-amber-600" /> BẢNG ĐIỀU KHIỂN QUẢN TRỊ
+          <h1 className="editorial-title text-3xl sm:text-4xl text-zinc-950 flex items-center gap-2">
+            <Shield className="w-6 h-6 text-zinc-600" /> Quản trị
           </h1>
           <p className="text-xs text-zinc-500 mt-1">
             Viết truyện, đăng tải chương, quản lý bộ sưu tập thẻ bài và duyệt đơn đổi thưởng
@@ -647,7 +675,7 @@ export default function AdminPage() {
               : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
           }`}
         >
-          <BookOpen className="w-4 h-4 text-amber-500" /> Viết & Đăng Tải Truyện ({stories.length})
+          <BookOpen className="w-4 h-4 text-zinc-500" /> Truyện ({stories.length})
         </button>
         <button
           onClick={() => setAdminTab("cards")}
@@ -657,7 +685,7 @@ export default function AdminPage() {
               : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
           }`}
         >
-          <Layers className="w-4 h-4 text-zinc-500" /> Quản Lý Thẻ Bài & Album ({cards.length})
+          <Layers className="w-4 h-4 text-zinc-500" /> Thẻ và album ({cards.length})
         </button>
         <button
           onClick={() => setAdminTab("redemptions")}
@@ -667,7 +695,7 @@ export default function AdminPage() {
               : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
           }`}
         >
-          <Gift className="w-4 h-4 text-zinc-500" /> Đơn Đổi Quà ({redemptions.length})
+          <Gift className="w-4 h-4 text-zinc-500" /> Đơn đổi quà ({redemptions.length})
         </button>
       </div>
 
@@ -687,26 +715,26 @@ export default function AdminPage() {
       {/* TAB 1: VIẾT & ĐĂNG TẢI TRUYỆN (STORIES & CHAPTERS)                         */}
       {/* ========================================================================= */}
       {adminTab === "stories" && (
-        <div className="space-y-8 animate-fade-in">
+        <div id={selectedStory ? "chapter-editor" : "story-editor"} className="scroll-mt-24 space-y-8 animate-fade-in">
           {/* Sub Navigation if managing chapters */}
           {selectedStory && (
-            <div className="bg-amber-50/80 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="bg-zinc-50/80 border border-zinc-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setSelectedStory(null)}
-                  className="p-1.5 rounded-lg bg-white border border-amber-300 text-amber-800 hover:bg-amber-100 transition-colors"
+                  className="p-1.5 rounded-lg bg-white border border-zinc-300 text-zinc-800 hover:bg-zinc-100 transition-colors"
                   title="Quay lại danh sách truyện"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
                 <div>
-                  <div className="text-[10px] uppercase font-mono font-bold text-amber-700">Đang soạn thảo chương cho tác phẩm:</div>
+                  <div className="text-[10px] uppercase font-mono font-bold text-zinc-700">Đang soạn thảo chương cho tác phẩm:</div>
                   <h3 className="text-base font-bold text-zinc-900">{selectedStory.title}</h3>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedStory(null)}
-                className="text-xs font-semibold px-3 py-1.5 rounded-md bg-white border border-amber-300 text-amber-900 hover:bg-amber-100"
+                className="text-xs font-semibold px-3 py-1.5 rounded-md bg-white border border-zinc-300 text-zinc-900 hover:bg-zinc-100"
               >
                 Đổi Tác Phẩm Khác
               </button>
@@ -721,7 +749,7 @@ export default function AdminPage() {
                 <div className="bg-card border border-border p-6 rounded-xl shadow-sm">
                   <div className="flex items-center justify-between pb-3 border-b border-border mb-4">
                     <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                      <Edit3 className="w-4 h-4 text-amber-600" />
+                      <Edit3 className="w-4 h-4 text-zinc-600" />
                       {editingChapterId ? `Chỉnh sửa nội dung chương #${chapterNumber}` : "Viết & Đăng Tải Chương Mới"}
                     </h2>
                     <div className="flex items-center gap-2">
@@ -729,7 +757,7 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => setPreviewChapter(!previewChapter)}
                         className={`text-xs px-2.5 py-1 rounded-md border font-medium transition-colors flex items-center gap-1 ${
-                          previewChapter ? "bg-amber-100 border-amber-300 text-amber-900" : "bg-zinc-100 border-zinc-200 text-zinc-700"
+                          previewChapter ? "bg-zinc-100 border-zinc-300 text-zinc-900" : "bg-zinc-100 border-zinc-200 text-zinc-700"
                         }`}
                       >
                         <Eye className="w-3.5 h-3.5" />
@@ -770,8 +798,8 @@ export default function AdminPage() {
 
                     {/* Content editor or justified live preview */}
                     {previewChapter ? (
-                      <div className="bg-zinc-50/80 border border-amber-200 rounded-lg p-5 min-h-[300px]">
-                        <div className="text-[10px] font-mono text-amber-700 uppercase mb-2 font-bold">
+                      <div className="bg-zinc-50/80 border border-zinc-200 rounded-lg p-5 min-h-[300px]">
+                        <div className="text-[10px] font-mono text-zinc-700 uppercase mb-2 font-bold">
                           [Chế độ xem trước - Hiển thị căn đều như độc giả xem]
                         </div>
                         <h3 className="font-bold text-center text-base text-zinc-900 mb-4">{chapterTitle || "Tiêu đề chương"}</h3>
@@ -780,7 +808,7 @@ export default function AdminPage() {
                           style={{ textAlign: "justify", textJustify: "inter-word" }}
                         >
                           {chapterContent
-                            ? chapterContent.split(/\n\s*\n/).map((p, idx) => (
+                            ? normalizeStoryText(chapterContent).split(/\n\s*\n/).map((p, idx) => (
                                 <p key={idx} className="indent-6" style={{ textAlign: "justify", textJustify: "inter-word" }}>
                                   {p}
                                 </p>
@@ -792,7 +820,7 @@ export default function AdminPage() {
                       <div>
                         <div className="flex justify-between items-center mb-1">
                           <label className="text-xs font-semibold text-zinc-700">
-                            Nội dung chương (Hỗ trợ tiếng Việt đầy đủ) *
+                            Nội dung chương *
                           </label>
                           <span className="text-[11px] font-mono text-zinc-400">
                             {chapterContent.trim() ? chapterContent.trim().split(/\s+/).length : 0} từ | {chapterContent.length} ký tự
@@ -803,12 +831,9 @@ export default function AdminPage() {
                           rows={14}
                           value={chapterContent}
                           onChange={(e) => setChapterContent(e.target.value)}
-                          placeholder="Nhập hoặc dán nội dung truyện vào đây. Cách đoạn bằng cách nhấn Enter 2 lần..."
+                          placeholder="Nhấn Enter hai lần để bắt đầu đoạn mới."
                           className="w-full bg-zinc-50 border border-border rounded-lg p-3 text-sm text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-800 font-sans leading-relaxed"
                         />
-                        <p className="text-[11px] text-zinc-500 mt-1">
-                          Mẹo: Văn bản khi xuất bản sẽ được tự động **căn đều hai bên (`text-justify`)** và thụt đầu dòng từng đoạn văn để độc giả có trải nghiệm đọc tốt nhất.
-                        </p>
                       </div>
                     )}
 
@@ -848,7 +873,7 @@ export default function AdminPage() {
                     </h3>
                     <button
                       onClick={resetChapterForm}
-                      className="text-[11px] text-amber-700 font-semibold hover:underline flex items-center gap-0.5"
+                      className="text-[11px] text-zinc-700 font-semibold hover:underline flex items-center gap-0.5"
                     >
                       <Plus className="w-3 h-3" /> Viết mới
                     </button>
@@ -868,7 +893,7 @@ export default function AdminPage() {
                           key={ch._id}
                           className={`p-3 rounded-lg border transition-all flex items-start justify-between gap-2 ${
                             editingChapterId === ch._id
-                              ? "bg-amber-50/70 border-amber-300"
+                              ? "bg-zinc-50/70 border-zinc-300"
                               : "border-border hover:border-zinc-350 bg-zinc-50/30"
                           }`}
                         >
@@ -910,7 +935,7 @@ export default function AdminPage() {
               <div className="lg:col-span-1 space-y-6">
                 <div className="bg-card border border-border p-6 rounded-xl shadow-sm">
                   <h2 className="text-sm font-bold text-zinc-900 uppercase tracking-wider mb-4 pb-2 border-b border-border flex items-center gap-2">
-                    <BookOpen className="w-4 h-4 text-amber-600" />
+                    <BookOpen className="w-4 h-4 text-zinc-600" />
                     {editingStoryId ? "Chỉnh Sửa Thông Tin Truyện" : "Tạo Truyện Mới"}
                   </h2>
 
@@ -1093,7 +1118,7 @@ export default function AdminPage() {
                                   {st.category}
                                 </span>
                               </td>
-                              <td className="py-3 px-3 font-mono font-bold text-amber-700">
+                              <td className="py-3 px-3 font-mono font-bold text-zinc-700">
                                 {st.totalChapters || 0} chương
                               </td>
                               <td className="py-3 px-3 text-right space-x-1.5 whitespace-nowrap">
@@ -1417,7 +1442,7 @@ export default function AdminPage() {
                         <div className="text-[10px] text-zinc-400">@{r.userId?.username || "deleted"}</div>
                       </td>
                       <td className="py-3 px-3 font-semibold text-zinc-900">{r.giftName}</td>
-                      <td className="py-3 px-3 text-amber-600 font-medium">-{r.pointsSpent}</td>
+                      <td className="py-3 px-3 text-zinc-600 font-medium">-{r.pointsSpent}</td>
                       <td className="py-3 px-3 text-zinc-500">
                         {new Date(r.createdAt).toLocaleString("vi-VN", {
                           day: "2-digit",

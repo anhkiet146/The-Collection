@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['"Times New Roman"', '"Noto Serif"', "serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

@@ -152,7 +152,7 @@ export default function AlbumPage() {
       {/* Stats Board */}
       <div className="bg-card border border-border p-6 rounded-lg mb-8 flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-zinc-100">BỘ SƯU TẬP ALBUM</h1>
+          <h1 className="editorial-title text-3xl text-zinc-100">Bộ sưu tập</h1>
           <p className="text-xs text-zinc-450 mt-1">
             Mở khóa các thẻ bài độc đáo để nhận được các danh hiệu và phần thưởng
           </p>

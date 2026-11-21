@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Search, Eye, Sparkles, Filter, ChevronRight, User as UserIcon } from "lucide-react";
+import StoryCover from "@/components/StoryCover";
+import { useIsAdmin } from "@/components/Header";
+import { BookOpen, Search, Eye, Filter, Plus, User as UserIcon } from "lucide-react";
 
 interface StoryInfo {
   _id: string;
@@ -30,6 +32,7 @@ const CATEGORIES = [
 ];
 
 export default function StoriesHomePage() {
+  const isAdmin = useIsAdmin();
   const [stories, setStories] = useState<StoryInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -67,35 +70,14 @@ export default function StoriesHomePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
-      {/* Hero Banner */}
-      <div className="relative rounded-2xl bg-gradient-to-r from-zinc-900 via-zinc-850 to-zinc-900 text-white p-6 sm:p-10 mb-10 overflow-hidden shadow-md">
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-medium mb-3 backdrop-blur-sm">
-            <BookOpen className="w-3.5 h-3.5" /> Thư Viện Truyện Chính Thức
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">
-            Đọc Truyện & Khám Phá Thế Giới
-          </h1>
-          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-6 font-light">
-            Tuyển tập những tác phẩm truyện kỳ ảo, phiêu lưu hấp dẫn với nội dung trình bày chuẩn xác, căn đều chữ đẹp mắt và hỗ trợ tiếng Việt trọn vẹn.
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/gacha"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-zinc-950 font-semibold text-xs sm:text-sm transition-all shadow-sm"
-            >
-              <Sparkles className="w-4 h-4" /> Quay Thẻ Nhân Vật
-            </Link>
-            <a
-              href="#story-list"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium text-xs sm:text-sm transition-all"
-            >
-              Khám Phá Danh Sách <ChevronRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </div>
+      <section className="mb-8 flex flex-wrap items-end justify-between gap-5 border-y border-zinc-900 py-8 sm:py-12">
+        <h1 className="editorial-title text-5xl sm:text-7xl lg:text-8xl">Thư viện truyện</h1>
+        {isAdmin && (
+          <Link href="/admin#story-editor" className="editorial-action editorial-action-filled">
+            <Plus className="size-4" /> Thêm truyện
+          </Link>
+        )}
+      </section>
 
       {/* Search & Filter Bar */}
       <div id="story-list" className="mb-8 space-y-4">
@@ -107,7 +89,8 @@ export default function StoriesHomePage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Tìm theo tên truyện hoặc tác giả..."
+              aria-label="Tìm theo tên truyện hoặc tác giả"
+              placeholder="Tìm theo tên truyện hoặc tác giả…"
               className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-800"
             />
           </form>
@@ -118,6 +101,7 @@ export default function StoriesHomePage() {
               <Filter className="w-3.5 h-3.5" /> Trạng thái:
             </span>
             <select
+              aria-label="Trạng thái truyện"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="px-3 py-2 rounded-lg border border-border bg-card text-xs font-medium text-zinc-800 focus:outline-none"
@@ -136,11 +120,12 @@ export default function StoriesHomePage() {
             return (
               <button
                 key={cat}
+                aria-pressed={active}
                 onClick={() => setSelectedCategory(cat)}
                 className={`text-xs px-3.5 py-1.5 rounded-full font-medium transition-all shrink-0 ${
                   active
                     ? "bg-zinc-900 text-white shadow-sm"
-                    : "bg-zinc-100 hover:bg-zinc-200 text-zinc-650"
+                    : "bg-zinc-100 hover:bg-zinc-200 text-zinc-600"
                 }`}
               >
                 {cat === "ALL" ? "Tất Cả Thể Loại" : cat}
@@ -170,30 +155,17 @@ export default function StoriesHomePage() {
             <Link
               key={story._id}
               href={`/stories/${story._id}`}
-              className="group bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-zinc-350 transition-all flex flex-col"
+              className="group bg-card border border-border overflow-hidden hover:border-zinc-900 transition-all flex flex-col"
             >
               {/* Cover Image */}
               <div className="relative aspect-[3/4] bg-zinc-100 overflow-hidden">
-                <img
-                  src={
-                    story.coverImage ||
-                    "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80"
-                  }
-                  alt={story.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src =
-                      "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
-                  }}
-                />
+                <StoryCover src={story.coverImage} loading="lazy" />
                 {/* Status Badge */}
                 <span
                   className={`absolute top-2.5 left-2.5 text-[10px] font-semibold px-2 py-0.5 rounded-full backdrop-blur-md shadow-sm ${
                     story.status === "COMPLETED"
-                      ? "bg-emerald-600/90 text-white"
-                      : "bg-amber-600/90 text-white"
+                      ? "bg-white text-zinc-950"
+                      : "bg-zinc-950 text-white"
                   }`}
                 >
                   {story.status === "COMPLETED" ? "Hoàn thành" : "Đang ra"}
@@ -208,7 +180,7 @@ export default function StoriesHomePage() {
               {/* Story Details */}
               <div className="p-4 flex flex-col flex-grow justify-between">
                 <div>
-                  <h3 className="font-bold text-sm text-zinc-900 group-hover:text-amber-600 transition-colors line-clamp-1 leading-snug">
+                  <h3 className="editorial-title text-xl text-zinc-950 line-clamp-2 leading-snug">
                     {story.title}
                   </h3>
 
@@ -217,7 +189,7 @@ export default function StoriesHomePage() {
                     <span className="truncate">{story.author || "Tác giả"}</span>
                   </div>
 
-                  <p className="text-xs text-zinc-550 mt-2 line-clamp-2 leading-relaxed font-light">
+                  <p className="text-xs text-zinc-600 mt-2 line-clamp-2 leading-relaxed font-light">
                     {story.description || "Chưa có mô tả cho tác phẩm này."}
                   </p>
                 </div>

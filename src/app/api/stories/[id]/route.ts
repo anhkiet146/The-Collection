@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Story, Chapter } from "@/lib/models";
 import { getSessionUser } from "@/lib/auth";
+import { normalizeStoryFields, normalizeStoryText } from "@/lib/story-text";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       .sort({ chapterNumber: 1 })
       .lean();
 
-    return NextResponse.json({ success: true, story, chapters });
+    return NextResponse.json({ success: true, story: normalizeStoryFields(story), chapters: chapters.map(normalizeStoryFields) });
   } catch (error: any) {
     console.error("GET /api/stories/[id] error:", error);
     return NextResponse.json({ success: false, error: "Lỗi tải thông tin truyện" }, { status: 500 });
@@ -40,9 +41,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const updated = await Story.findByIdAndUpdate(
       id,
       {
-        title: title?.trim(),
-        author: author?.trim(),
-        description: description?.trim(),
+        title: title == null ? undefined : normalizeStoryText(title.trim()),
+        author: author == null ? undefined : normalizeStoryText(author.trim()),
+        description: description == null ? undefined : normalizeStoryText(description.trim()),
         coverImage: coverImage?.trim(),
         category: category?.trim(),
         status: status === "COMPLETED" ? "COMPLETED" : "ONGOING",

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
+import { useIsAdmin } from "@/components/Header";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -13,6 +14,7 @@ import {
   Sun,
   Moon,
   List,
+  Pencil,
 } from "lucide-react";
 
 interface ChapterData {
@@ -52,6 +54,7 @@ export default function ChapterReaderPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
+  const isAdmin = useIsAdmin();
 
   // Reading settings state
   const [fontSize, setFontSize] = useState<number>(18);
@@ -60,6 +63,7 @@ export default function ChapterReaderPage({
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
+    setError("");
     fetchChapter();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id, chapterId]);
@@ -103,7 +107,7 @@ export default function ChapterReaderPage({
         };
       default:
         return {
-          wrapper: "bg-zinc-50/60 text-zinc-900",
+          wrapper: "bg-background text-zinc-900",
           card: "bg-white border-border shadow-sm",
           toolbar: "bg-white/95 border-border text-zinc-800",
           meta: "text-zinc-500",
@@ -145,7 +149,7 @@ export default function ChapterReaderPage({
   return (
     <div className={`min-h-screen transition-colors duration-300 ${themeStyles.wrapper}`}>
       {/* Sticky Top Reading Toolbar */}
-      <div className={`sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${themeStyles.toolbar}`}>
+      <div className={`sticky top-16 z-40 backdrop-blur-md border-b transition-colors ${themeStyles.toolbar}`}>
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link
             href={`/stories/${id}`}
@@ -257,18 +261,23 @@ export default function ChapterReaderPage({
       </div>
 
       {/* Main Chapter Content Container */}
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
         {/* Story & Chapter Titles Header */}
-        <div className="text-center mb-10 pb-6 border-b border-dashed border-border/70">
+        <div className="text-center mb-10 pb-6 border-b border-current/20">
           <Link
             href={`/stories/${id}`}
-            className="text-xs uppercase tracking-widest font-semibold text-amber-600 hover:underline mb-2 inline-block"
+            className="text-xs uppercase tracking-widest font-semibold opacity-75 hover:underline mb-2 inline-block"
           >
             {story?.title}
           </Link>
-          <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight mt-1 mb-3">
+          <h1 className="editorial-title text-4xl sm:text-6xl mt-1 mb-4">
             {chapter.title}
           </h1>
+          {isAdmin && (
+            <Link href={`/admin?story=${id}&chapter=${chapterId}#chapter-editor`} className="editorial-action mb-4">
+              <Pencil className="size-4" /> Sửa chương
+            </Link>
+          )}
           <div className={`text-xs ${themeStyles.meta} flex items-center justify-center gap-4 font-mono`}>
             <span>Chương {chapter.chapterNumber}</span>
             <span>•</span>
@@ -292,7 +301,7 @@ export default function ChapterReaderPage({
           {paragraphs.map((p, idx) => (
             <p
               key={idx}
-              className="mb-6 indent-6 sm:indent-8 text-justify leading-relaxed"
+              className="mb-6 indent-6 sm:indent-8 whitespace-pre-line break-words leading-[1.85]"
               style={{ textAlign: "justify", textJustify: "inter-word" }}
             >
               {p}
@@ -335,7 +344,7 @@ export default function ChapterReaderPage({
             </div>
           )}
         </div>
-      </main>
+      </section>
     </div>
   );
 }

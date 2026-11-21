@@ -44,7 +44,7 @@ export default function LoginPage() {
           <div className="p-3 bg-zinc-100 rounded-md mb-3">
             <Sparkles className="w-6 h-6 text-zinc-700" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-zinc-900">THE COLLECTION</h1>
+          <h1 className="editorial-title text-3xl text-zinc-900">The Collection</h1>
           <p className="text-xs text-zinc-555 mt-1.5 text-center px-4">
             Nhập tên của bạn để bắt đầu quay thẻ gacha
           </p>

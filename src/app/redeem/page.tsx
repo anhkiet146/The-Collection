@@ -221,7 +221,7 @@ export default function RedeemPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 animate-fade-in">
         <div>
-          <h1 className="text-xl font-bold text-zinc-950 flex items-center gap-2">
+          <h1 className="editorial-title text-3xl text-zinc-950 flex items-center gap-2">
             <Coins className="w-6 h-6 text-amber-500" /> Cửa Hàng Quy Đổi
           </h1>
           <p className="text-sm text-zinc-500 mt-1">

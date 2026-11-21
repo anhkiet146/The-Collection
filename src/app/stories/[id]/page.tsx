@@ -2,8 +2,9 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { BookOpen, User, Eye, ArrowLeft, Calendar, FileText, ChevronRight, Play } from "lucide-react";
+import StoryCover from "@/components/StoryCover";
+import { useIsAdmin } from "@/components/Header";
+import { BookOpen, User, Eye, ArrowLeft, FileText, ChevronRight, Play, Pencil, Plus } from "lucide-react";
 
 interface StoryDetail {
   _id: string;
@@ -33,9 +34,11 @@ export default function StoryDetailPage({ params }: { params: Promise<{ id: stri
   const [chapters, setChapters] = useState<ChapterItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const router = useRouter();
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
+    setLoading(true);
+    setError("");
     fetchStory();
   }, [id]);
 
@@ -94,23 +97,11 @@ export default function StoryDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* Main Story Overview Card */}
-      <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-sm mb-10">
+      <div className="border-y border-zinc-900 py-7 sm:py-10 mb-10">
         <div className="flex flex-col md:flex-row gap-6 sm:gap-8">
           {/* Cover image */}
-          <div className="w-44 sm:w-56 mx-auto md:mx-0 shrink-0 aspect-[3/4] rounded-xl overflow-hidden shadow-md border border-border relative bg-zinc-100">
-            <img
-              src={
-                story.coverImage ||
-                "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80"
-              }
-              alt={story.title}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src =
-                  "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
-              }}
-            />
+          <div className="w-44 sm:w-56 mx-auto md:mx-0 shrink-0 aspect-[3/4] overflow-hidden border border-border relative bg-zinc-100">
+            <StoryCover src={story.coverImage} />
           </div>
 
           {/* Details */}
@@ -123,15 +114,15 @@ export default function StoryDetailPage({ params }: { params: Promise<{ id: stri
                 <span
                   className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
                     story.status === "COMPLETED"
-                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                      : "bg-amber-50 text-amber-700 border border-amber-200"
+                      ? "bg-zinc-900 text-white border border-zinc-900"
+                      : "bg-white text-zinc-700 border border-zinc-200"
                   }`}
                 >
                   {story.status === "COMPLETED" ? "Đã hoàn thành" : "Đang tiến hành"}
                 </span>
               </div>
 
-              <h1 className="text-xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight leading-snug">
+              <h1 className="editorial-title text-4xl sm:text-5xl text-zinc-950">
                 {story.title}
               </h1>
 
@@ -162,6 +153,17 @@ export default function StoryDetailPage({ params }: { params: Promise<{ id: stri
               </div>
             </div>
 
+            {isAdmin && (
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Link href={`/admin?story=${id}&action=edit#story-editor`} className="editorial-action">
+                  <Pencil className="size-4" /> Sửa truyện
+                </Link>
+                <Link href={`/admin?story=${id}&action=add#chapter-editor`} className="editorial-action">
+                  <Plus className="size-4" /> Thêm chương
+                </Link>
+              </div>
+            )}
+
             {/* Read actions */}
             <div className="mt-6 pt-4 flex flex-wrap gap-3">
               {firstChapter && (
@@ -169,7 +171,7 @@ export default function StoryDetailPage({ params }: { params: Promise<{ id: stri
                   href={`/stories/${story._id}/chapter/${firstChapter._id}`}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-950 text-white font-semibold text-xs sm:text-sm transition-all shadow-sm"
                 >
-                  <Play className="w-4 h-4 fill-white" /> Đọc từ đầu (Chương 1)
+                  <Play className="w-4 h-4 fill-white" /> Đọc từ đầu
                 </Link>
               )}
               {latestChapter && latestChapter._id !== firstChapter?._id && (
@@ -186,11 +188,11 @@ export default function StoryDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* Chapter List Section */}
-      <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div className="border-t border-zinc-900 py-6 sm:py-8">
         <div className="flex items-center justify-between pb-4 border-b border-border mb-6">
           <div className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-zinc-600" />
-            <h2 className="text-base sm:text-lg font-bold text-zinc-900">
+            <h2 className="editorial-title text-2xl text-zinc-950">
               Danh Sách Chương ({chapters.length})
             </h2>
           </div>
@@ -210,10 +212,10 @@ export default function StoryDetailPage({ params }: { params: Promise<{ id: stri
                 className="group flex items-center justify-between p-3.5 rounded-lg border border-border hover:border-zinc-400 hover:bg-zinc-50/70 transition-all"
               >
                 <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                  <span className="text-xs font-mono font-bold text-amber-600 shrink-0">
+                  <span className="text-xs font-mono font-bold text-zinc-600 shrink-0">
                     #{ch.chapterNumber}
                   </span>
-                  <span className="text-xs sm:text-sm font-medium text-zinc-850 group-hover:text-zinc-950 truncate">
+                  <span className="text-xs sm:text-sm font-medium text-zinc-800 group-hover:text-zinc-950 truncate">
                     {ch.title}
                   </span>
                 </div>

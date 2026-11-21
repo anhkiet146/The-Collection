@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Story, Chapter } from "@/lib/models";
 import { getSessionUser } from "@/lib/auth";
+import { normalizeStoryFields, normalizeStoryText } from "@/lib/story-text";
 
 export async function GET(
   req: NextRequest,
@@ -43,11 +44,11 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      chapter,
-      story,
-      prevChapter,
-      nextChapter,
-      allChapters,
+      chapter: normalizeStoryFields(chapter),
+      story: story && normalizeStoryFields(story),
+      prevChapter: prevChapter && normalizeStoryFields(prevChapter),
+      nextChapter: nextChapter && normalizeStoryFields(nextChapter),
+      allChapters: allChapters.map(normalizeStoryFields),
     });
   } catch (error: any) {
     console.error("GET chapter error:", error);
@@ -76,8 +77,8 @@ export async function PUT(
       { _id: chapterId, storyId: id },
       {
         ...(chapterNumber ? { chapterNumber: Number(chapterNumber) } : {}),
-        ...(title ? { title: title.trim() } : {}),
-        ...(content ? { content: content.trim(), wordCount: words } : {}),
+        ...(title ? { title: normalizeStoryText(title.trim()) } : {}),
+        ...(content ? { content: normalizeStoryText(content.trim()), wordCount: words } : {}),
         updatedAt: new Date(),
       },
       { new: true }

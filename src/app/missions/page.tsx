@@ -87,7 +87,7 @@ export default function MissionsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-xl font-bold tracking-tight text-zinc-900 flex items-center gap-2">
+        <h1 className="editorial-title text-3xl text-zinc-900 flex items-center gap-2">
           <Award className="w-6 h-6 text-zinc-500" /> HỆ THỐNG NHIỆM VỤ
         </h1>
         <p className="text-xs text-zinc-500 mt-1">

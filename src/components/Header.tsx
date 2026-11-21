@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { LogOut, ShieldAlert, Sparkles, Menu, X, BookOpen, Dices } from "lucide-react";
 
@@ -13,7 +13,13 @@ interface UserInfo {
   pityCounter: number;
 }
 
-export default function Header() {
+const AdminContext = createContext(false);
+
+export function useIsAdmin() {
+  return useContext(AdminContext);
+}
+
+export default function Header({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfo | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
@@ -40,6 +46,7 @@ export default function Header() {
       if (data.success) {
         setUser(data.user);
       } else {
+        setUser(null);
         if (pathname !== "/login" && pathname !== "/register") {
           router.push("/login");
         }
@@ -56,6 +63,7 @@ export default function Header() {
       const res = await fetch("/api/auth/logout", { method: "POST" });
       const data = await res.json();
       if (data.success) {
+        setUser(null);
         router.push("/login");
       }
     } catch (err) {
@@ -64,24 +72,24 @@ export default function Header() {
   };
 
   if (!user && (pathname === "/login" || pathname === "/register")) {
-    return null;
+    return <>{children}</>;
   }
 
-  return (
+  const navigation = (
     <header className="border-b border-border bg-card/85 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 font-medium tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors">
             <Sparkles className="w-5 h-5 text-zinc-500" />
-            <span className="font-semibold text-zinc-900">THE COLLECTION</span>
+            <span className="editorial-title text-base text-zinc-950">The Collection</span>
           </Link>
           
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-4">
             <Link 
               href="/" 
               className={`text-sm font-medium flex items-center gap-1.5 transition-colors ${pathname === "/" || pathname.startsWith("/stories") ? "text-zinc-950 font-bold" : "text-zinc-500 hover:text-zinc-800"}`}
             >
-              <BookOpen className="w-4 h-4 text-amber-600" /> Đọc Truyện
+              <BookOpen className="w-4 h-4 text-zinc-800" /> Đọc Truyện
             </Link>
             <Link 
               href="/gacha" 
@@ -110,9 +118,9 @@ export default function Header() {
             {user?.role === "ADMIN" && (
               <Link 
                 href="/admin" 
-                className={`text-sm font-medium flex items-center gap-1 transition-colors ${pathname === "/admin" ? "text-amber-600 font-semibold" : "text-amber-600/80 hover:text-amber-700"}`}
+                className={`text-sm font-medium flex items-center gap-1 transition-colors ${pathname === "/admin" ? "text-zinc-800 font-semibold" : "text-zinc-600 hover:text-zinc-950"}`}
               >
-                <ShieldAlert className="w-4 h-4" /> Admin
+                <ShieldAlert className="w-4 h-4" /> Quản trị
               </Link>
             )}
           </nav>
@@ -133,7 +141,7 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="hidden sm:inline text-sm font-medium text-zinc-650 mr-1">
+              <span className="hidden sm:inline max-w-24 truncate text-sm font-medium text-zinc-600 mr-1">
                 {user.displayName}
               </span>
               <button 
@@ -144,8 +152,10 @@ export default function Header() {
                 <LogOut className="w-4 h-4" />
               </button>
               <button
+                aria-label="Menu điều hướng"
+                aria-expanded={mobileMenuOpen}
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden text-zinc-500 hover:text-zinc-900 transition-colors p-2 hover:bg-zinc-100 rounded-md"
+                className="lg:hidden text-zinc-500 hover:text-zinc-900 transition-colors p-2 hover:bg-zinc-100 rounded-md"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -156,7 +166,7 @@ export default function Header() {
 
       {/* Mobile nav menu */}
       {mobileMenuOpen && user && (
-        <div className="md:hidden border-b border-border bg-card px-4 py-3 flex flex-col gap-2 animate-fade-in">
+        <div className="lg:hidden border-b border-border bg-card px-4 py-3 flex flex-col gap-2 animate-fade-in">
           {/* Mobile Stats Dashboard */}
           <div className="flex justify-between items-center bg-zinc-50/50 border border-border rounded-md p-3 mb-1 text-xs">
             <div className="flex flex-col gap-0.5">
@@ -174,7 +184,7 @@ export default function Header() {
             onClick={() => setMobileMenuOpen(false)}
             className={`text-sm py-2 px-3 rounded-md flex items-center gap-2 transition-colors ${pathname === "/" || pathname.startsWith("/stories") ? "bg-zinc-100 text-zinc-900 font-bold" : "text-zinc-600 hover:bg-zinc-50"}`}
           >
-            <BookOpen className="w-4 h-4 text-amber-600" /> Đọc Truyện
+            <BookOpen className="w-4 h-4 text-zinc-800" /> Đọc Truyện
           </Link>
           <Link 
             href="/gacha" 
@@ -208,13 +218,20 @@ export default function Header() {
             <Link 
               href="/admin" 
               onClick={() => setMobileMenuOpen(false)}
-              className={`text-sm py-2 px-3 rounded-md text-amber-600 hover:bg-zinc-50 transition-colors flex items-center gap-1`}
+              className={`text-sm py-2 px-3 rounded-md text-zinc-800 hover:bg-zinc-50 transition-colors flex items-center gap-1`}
             >
-              <ShieldAlert className="w-4 h-4" /> Admin Panel
+              <ShieldAlert className="w-4 h-4" /> Quản trị
             </Link>
           )}
         </div>
       )}
     </header>
+  );
+
+  return (
+    <AdminContext.Provider value={user?.role === "ADMIN"}>
+      {navigation}
+      {children}
+    </AdminContext.Provider>
   );
 }

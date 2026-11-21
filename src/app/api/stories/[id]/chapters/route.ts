@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Story, Chapter } from "@/lib/models";
 import { getSessionUser } from "@/lib/auth";
+import { normalizeStoryFields, normalizeStoryText } from "@/lib/story-text";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -9,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     await connectToDatabase();
 
     const chapters = await Chapter.find({ storyId: id }).sort({ chapterNumber: 1 }).lean();
-    return NextResponse.json({ success: true, chapters });
+    return NextResponse.json({ success: true, chapters: chapters.map(normalizeStoryFields) });
   } catch (error: any) {
     console.error("GET /api/stories/[id]/chapters error:", error);
     return NextResponse.json({ success: false, error: "Lỗi tải danh sách chương" }, { status: 500 });
@@ -50,8 +51,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const chapter = await Chapter.create({
       storyId: id,
       chapterNumber: num,
-      title: title.trim(),
-      content: content.trim(),
+      title: normalizeStoryText(title.trim()),
+      content: normalizeStoryText(content.trim()),
       wordCount: words,
     });
 
